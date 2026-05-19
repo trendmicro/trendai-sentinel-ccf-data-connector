@@ -1,0 +1,55 @@
+# Azure and deployment artifacts
+*.log
+*.publishsettings
+*.azurePubxml
+
+# Secrets and credentials
+*.key
+*.pem
+.env
+.env.local
+secrets/
+api-keys/
+
+# IDE and editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# Backup files
+*.bak
+*.backup
+
+# Node modules (if any scripts use Node)
+node_modules/
+package-lock.json
+
+# Python (if any scripts use Python)
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+venv/
+env/
+*.egg-info/
+
+# Testing and coverage
+.coverage
+htmlcov/
+.pytest_cache/
+
+# ARM template deployment artifacts
+deployment-outputs.json
+deployment-*.log
+
+# Local configuration overrides
+*-local.json
+local-config/
