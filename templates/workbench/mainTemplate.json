@@ -1,0 +1,213 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+    "contentVersion": "1.0.0.0",
+    "metadata": {
+        "title": "Trend Vision One - Workbench Alerts Connector",
+        "description": "This solution installs the Trend Vision One Workbench data connector to ingest security alerts into Microsoft Sentinel. After installing the solution, configure and enable this data connector by following the guidance in the Configuration section below.",
+        "author": {
+            "name": "Trend Micro"
+        },
+        "support": {
+            "tier": "Partner",
+            "name": "Trend Micro",
+            "link": "https://www.trendmicro.com/support"
+        }
+    },
+    "parameters": {
+        "workspace": {
+            "type": "string",
+            "metadata": {
+                "description": "Workspace name for Log Analytics where Microsoft Sentinel is set up"
+            }
+        },
+        "workspace-location": {
+            "type": "string",
+            "defaultValue": "[resourceGroup().location]",
+            "metadata": {
+                "description": "Location of the workspace (same as workspace region)"
+            }
+        },
+        "trendaiRegion": {
+            "type": "string",
+            "defaultValue": "US",
+            "allowedValues": ["UK", "US", "SG", "CA", "JP"],
+            "metadata": {
+                "description": "Trend Vision One region where your tenant is hosted"
+            }
+        }
+    },
+    "variables": {
+        "baseUrl": "https://raw.githubusercontent.com/nikhildubey-trend/trendai-sentinel-cdf-data-connector/main/templates/workbench/components"
+    },
+    "resources": [
+        {
+            "name": "sentinelSolution",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2022-09-01",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('baseUrl'), '/sentinel-solution.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "workspace": {
+                        "value": "[parameters('workspace')]"
+                    },
+                    "location": {
+                        "value": "[parameters('workspace-location')]"
+                    }
+                }
+            }
+        },
+        {
+            "name": "customTable",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2022-09-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments', 'sentinelSolution')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('baseUrl'), '/table.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "workspace": {
+                        "value": "[parameters('workspace')]"
+                    },
+                    "location": {
+                        "value": "[parameters('workspace-location')]"
+                    }
+                }
+            }
+        },
+        {
+            "name": "dataCollectionEndpoint",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2022-09-01",
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('baseUrl'), '/dce.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "location": {
+                        "value": "[parameters('workspace-location')]"
+                    }
+                }
+            }
+        },
+        {
+            "name": "dataCollectionRule",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2022-09-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments', 'customTable')]",
+                "[resourceId('Microsoft.Resources/deployments', 'dataCollectionEndpoint')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('baseUrl'), '/dcr.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "workspace": {
+                        "value": "[parameters('workspace')]"
+                    },
+                    "location": {
+                        "value": "[parameters('workspace-location')]"
+                    },
+                    "dceId": {
+                        "value": "[reference('dataCollectionEndpoint').outputs.dceId.value]"
+                    }
+                }
+            }
+        },
+        {
+            "name": "connectorDefinition",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2022-09-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments', 'sentinelSolution')]",
+                "[resourceId('Microsoft.Resources/deployments', 'dataCollectionRule')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('baseUrl'), '/connector-definition.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "workspace": {
+                        "value": "[parameters('workspace')]"
+                    },
+                    "location": {
+                        "value": "[parameters('workspace-location')]"
+                    },
+                    "trendaiRegion": {
+                        "value": "[parameters('trendaiRegion')]"
+                    },
+                    "dcrImmutableId": {
+                        "value": "[reference('dataCollectionRule').outputs.dcrImmutableId.value]"
+                    },
+                    "dceEndpoint": {
+                        "value": "[reference('dataCollectionEndpoint').outputs.dceEndpoint.value]"
+                    }
+                }
+            }
+        },
+        {
+            "name": "parserFunction",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2022-09-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments', 'customTable')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('baseUrl'), '/parser-function.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "workspace": {
+                        "value": "[parameters('workspace')]"
+                    },
+                    "workspace-location": {
+                        "value": "[parameters('workspace-location')]"
+                    }
+                }
+            }
+        }
+    ],
+    "outputs": {
+        "workspace": {
+            "type": "string",
+            "value": "[parameters('workspace')]"
+        },
+        "tableName": {
+            "type": "string",
+            "value": "[reference('customTable').outputs.tableName.value]"
+        },
+        "dcrImmutableId": {
+            "type": "string",
+            "value": "[reference('dataCollectionRule').outputs.dcrImmutableId.value]"
+        },
+        "dceEndpoint": {
+            "type": "string",
+            "value": "[reference('dataCollectionEndpoint').outputs.dceEndpoint.value]"
+        },
+        "parserFunctionName": {
+            "type": "string",
+            "value": "[reference('parserFunction').outputs.functionName.value]"
+        },
+        "message": {
+            "type": "string",
+            "value": "✅ Deployment complete! Next steps: 1) Go to Microsoft Sentinel → Data connectors 2) Find 'Trend Vision One - Workbench Alerts' 3) Click 'Open connector page' and connect with your API token"
+        }
+    }
+}

@@ -1,307 +1,272 @@
-# Trend Micro Vision One Azure Sentinel Data Connector
+# Trend Vision One - Microsoft Sentinel Data Connectors
 
-[![ARM Template Validation](https://github.com/yourusername/TrendAI_Sentinel_public_data_Connector/workflows/ARM%20Template%20Validation/badge.svg)](https://github.com/yourusername/TrendAI_Sentinel_public_data_Connector/actions)
+[![Deploy Workbench](https://img.shields.io/badge/Deploy-Workbench-blue?style=for-the-badge&logo=microsoft-azure)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fnikhildubey-trend%2Ftrendai-sentinel-cdf-data-connector%2Fmain%2Ftemplates%2Fworkbench%2FmainTemplate.json/createUIDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2Fnikhildubey-trend%2Ftrendai-sentinel-cdf-data-connector%2Fmain%2Ftemplates%2Fworkbench%2FcreateUiDefinition.json)
+[![Deploy OAT](https://img.shields.io/badge/Deploy-OAT-green?style=for-the-badge&logo=microsoft-azure)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fnikhildubey-trend%2Ftrendai-sentinel-cdf-data-connector%2Fmain%2Ftemplates%2Foat%2FmainTemplate.json/createUIDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2Fnikhildubey-trend%2Ftrendai-sentinel-cdf-data-connector%2Fmain%2Ftemplates%2Foat%2FcreateUiDefinition.json)
 
-A production-grade Azure Resource Manager (ARM) template-based data connector that ingests Trend Micro Vision One XDR data (Workbench alerts and Observed Attack Techniques) into Microsoft Sentinel.
+Production-ready data connectors for ingesting **Trend Vision One** security data into **Microsoft Sentinel** using Azure's Codeless Connector Platform (CCP).
 
-## Features
+## 🚀 Quick Deploy
 
-- **Automated Data Ingestion**: Poll Trend Micro Vision One API every 5 minutes
-- **Multiple Data Sources**: 
-  - Workbench Alerts (security incidents and investigations)
-  - Observed Attack Techniques (OAT) - MITRE ATT&CK mapped detections
-- **Enriched IOC Extraction**: Automatic extraction and normalization of:
-  - File hashes (SHA1, SHA256, MD5)
-  - IP addresses and domains
-  - URLs and file paths
-  - Registry keys and values
-  - Process command lines
-  - User accounts and hostnames
-  - Email addresses
-- **Production-Ready**: 
-  - Secure API key management via Azure Key Vault
-  - Managed Identity authentication
-  - Data Collection Rules (DCR) for structured ingestion
-  - Regional API endpoint support (US, UK, SG, CA, JP)
-- **ASIM Compatible**: Normalized field names for Azure Sentinel Advanced Security Information Model
+Choose the connector you need and click the Deploy button above:
 
-## Architecture
+| Connector | Description | Data Volume | Deploy |
+|-----------|-------------|-------------|--------|
+| **Workbench Alerts** | Security incidents, investigations, and alerts with IOC extraction | Medium | [Deploy to Azure](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fnikhildubey-trend%2Ftrendai-sentinel-cdf-data-connector%2Fmain%2Ftemplates%2Fworkbench%2FmainTemplate.json/createUIDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2Fnikhildubey-trend%2Ftrendai-sentinel-cdf-data-connector%2Fmain%2Ftemplates%2Fworkbench%2FcreateUiDefinition.json) |
+| **OAT (Observed Attack Techniques)** | MITRE ATT&CK mapped detections with full process trees | High | [Deploy to Azure](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Fnikhildubey-trend%2Ftrendai-sentinel-cdf-data-connector%2Fmain%2Ftemplates%2Foat%2FmainTemplate.json/createUIDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2Fnikhildubey-trend%2Ftrendai-sentinel-cdf-data-connector%2Fmain%2Ftemplates%2Foat%2FcreateUiDefinition.json) |
 
-```
-Trend Micro Vision One API
-          ↓
-  Azure Logic App (5min polling)
-          ↓
-  Data Collection Endpoint (DCE)
-          ↓
-  Data Collection Rule (DCR)
-          ↓
-  Log Analytics Custom Tables
-    - TrendMicro_XDR_WORKBENCH_CL
-    - TrendMicro_XDR_OAT_CL
-          ↓
-  Microsoft Sentinel Analytics Rules
-```
+## 📋 Prerequisites
 
-## Prerequisites
+Before deploying, ensure you have:
 
-- **Azure Subscription** with Microsoft Sentinel enabled
-- **Log Analytics Workspace** configured for Sentinel
-- **Trend Micro Vision One Account** with:
-  - API access enabled
-  - API key with `SIEM` role permissions ([Generate API Key](https://docs.trendmicro.com/en-us/enterprise/trend-vision-one/administrative-setti/administration/api-keys.aspx))
-- **Azure Permissions**:
-  - `Contributor` role on the resource group
-  - `Microsoft.OperationalInsights/workspaces/write`
-  - `Microsoft.Logic/workflows/write`
-  - `Microsoft.Insights/dataCollectionRules/write`
+- ✅ **Azure Subscription** with Owner or Contributor role
+- ✅ **Log Analytics Workspace** with Microsoft Sentinel enabled (or workspace will be enabled during deployment)
+- ✅ **Trend Vision One API Token** with 'SIEM' role permissions
 
-## Quick Start
+### Getting Your API Token
 
-### 1. Deploy Workbench Connector
+1. Log in to **Trend Vision One Console**
+2. Navigate to **Administration → API Keys**
+3. Click **Generate New API Key**
+4. Select role: **SIEM** or **Workbench**
+5. Copy the token (you'll need it after deployment)
 
-```bash
-az deployment group create \
-  --resource-group <your-resource-group> \
-  --template-file templates/arm-template-workbench-compatible-v2.json \
-  --parameters \
-    workspace="<your-workspace-name>" \
-    workspace-location="<region>" \
-    trendaiRegion="US" \
-    apikey="<your-trend-vision-one-api-key>"
-```
+## 🎯 Deployment Process
 
-**Example:**
-```bash
-az deployment group create \
-  --resource-group sentinel-rg \
-  --template-file templates/arm-template-workbench-compatible-v2.json \
-  --parameters \
-    workspace="sentinel-law" \
-    workspace-location="eastus" \
-    trendaiRegion="US" \
-    apikey="eyJhbGciOiJSUzI1NiIsInR5..."
-```
+### Step 1: Click Deploy Button
 
-### 2. Deploy OAT Connector (Optional)
+Click one of the blue/green Deploy buttons above
 
-```bash
-az deployment group create \
-  --resource-group <your-resource-group> \
-  --template-file templates/arm-template-oat-complete.json \
-  --parameters \
-    workspace="<your-workspace-name>" \
-    location="<region>" \
-    subscription="<subscription-id>" \
-    resourceGroupName="<resource-group>"
-```
+### Step 2: Fill Azure Portal Form
 
-### 3. Verify Deployment
+The custom deployment UI will appear with:
+- **Subscription** - Select your Azure subscription
+- **Resource Group** - Select or create new
+- **Workspace** - Dropdown of your Sentinel workspaces
+- **Region** - Your Trend Vision One region (US, UK, SG, CA, JP)
 
-After 5-10 minutes, check for data in Log Analytics:
+### Step 3: Deploy Resources
+
+Azure will automatically deploy:
+1. Microsoft Sentinel solution (if not enabled)
+2. Custom log table (TrendMicro_XDR_WORKBENCH_CL or TrendMicro_XDR_OAT_CL)
+3. Data Collection Endpoint (DCE)
+4. Data Collection Rule (DCR) with data transformation
+5. Connector definition in Sentinel portal
+6. Parser function (Workbench only)
+
+⏱️ **Deployment time**: 3-5 minutes
+
+### Step 4: Connect the Data Source
+
+After deployment completes:
+
+1. Navigate to **Microsoft Sentinel → Data connectors**
+2. Search for **"Trend Vision One - Workbench"** or **"Trend Vision One - OAT"**
+3. Click **Open connector page**
+4. Enter your API token (include `Bearer ` prefix)
+5. Click **Connect**
+
+🎉 **Data will start flowing in 5-10 minutes!**
+
+## 📊 Verify Data Ingestion
+
+### Workbench Alerts
 
 ```kql
 TrendMicro_XDR_WORKBENCH_CL
 | where TimeGenerated > ago(1h)
+| project TimeGenerated, workbenchId_s, severity_s, workbenchName_s
 | take 10
 ```
 
-## Available Templates
+### OAT Detections
 
-| Template | Purpose | Deployment Time | Polling Interval |
-|----------|---------|-----------------|------------------|
-| `arm-template-workbench-compatible-v2.json` | Workbench alerts with IOC enrichment | ~3-5 min | 5 minutes |
-| `arm-template-workbench-PRODUCTION-SAFE.json` | Production workbench connector | ~3-5 min | 5 minutes |
-| `arm-template-oat-complete.json` | Observed Attack Techniques (MITRE ATT&CK) | ~3-5 min | 5 minutes |
-
-## Data Enrichment
-
-The connector automatically extracts and normalizes Indicators of Compromise (IOCs) from raw Trend Micro data:
-
-### Extracted Fields
-
-- **File Indicators**: `FileName_s`, `FileHashValue_s`, `FileDirectory_s`
-- **Network Indicators**: `IPAddress`, `DomainName_s`, `URL_s`
-- **Host Indicators**: `HostHostName_s`, `ProcessCommandLine_s`
-- **Registry Indicators**: `RegistryKey_s`, `RegistryValue_s`, `RegistryValueName_s`
-- **User Indicators**: `UserAccountName_s`, `UserAccountNTDomain_s`, `MailboxPrimaryAddress_s`
-
-### Using Enriched Data
-
-**Option 1: Saved Query Function (Recommended)**
 ```kql
-// Save examples/WORKING-QUERY.kql as a function named "WorkbenchEnriched"
-WorkbenchEnriched
-| where severity_s == "critical"
+TrendMicro_XDR_OAT_CL
+| where TimeGenerated > ago(1h)
+| project TimeGenerated, entityType_s, detail_endpointHostName_s, detail_filterRiskLevel_s
+| take 10
+```
+
+## 🏗️ Architecture
+
+This solution follows Microsoft's recommended **modular architecture** pattern:
+
+```
+mainTemplate.json (Orchestrator)
+  ├─> sentinel-solution.json      # Enables Sentinel
+  ├─> table.json                  # Creates custom table
+  ├─> dce.json                    # Data Collection Endpoint
+  ├─> dcr.json                    # Data Collection Rule (transforms data)
+  ├─> connector-definition.json   # Connector UI in portal
+  └─> parser-function.json        # KQL parser (Workbench only)
+```
+
+**Benefits:**
+- ✅ Single-click deployment via Azure Portal
+- ✅ Each component can be updated independently
+- ✅ Easy to troubleshoot and maintain
+- ✅ Follows Microsoft Sentinel best practices
+
+## 📖 Data Schemas
+
+### Workbench Alerts (56 columns)
+
+| Category | Fields |
+|----------|--------|
+| **Core** | workbenchId_s, severity_s, investigationStatus_s, alertProvider_s |
+| **IOCs** | FileName_s, FileHashValue_s, IPAddress, DomainName_s, URL_s |
+| **Entities** | HostHostName_s, UserAccountName_s, MailboxPrimaryAddress_s |
+| **Dynamic** | indicators, entities, matchedRules (for advanced parsing) |
+
+### OAT Detections (139 columns)
+
+| Category | Fields |
+|----------|--------|
+| **Core** | entityType_s, entityName_s, detectionTime_t |
+| **Endpoint** | endpoint_name_s, endpoint_guid_g, endpoint_ips_s |
+| **Process** | detail_processCmd_s, detail_processFileHashSha256_s, detail_processPid_d |
+| **Parent** | detail_parentCmd_s, detail_parentFileHashSha256_s, detail_parentName_s |
+| **Network** | detail_src_s, detail_dst_s, detail_dpt_d, detail_spt_d |
+| **File** | detail_fileName_s, detail_fileHash_s, detail_filePathName_s |
+
+## 🔍 Sample Queries
+
+### Workbench: High Severity Alerts with File IOCs
+
+```kql
+TrendMicroWorkbench_Complete()
+| where severity_s in ("high", "critical")
 | where isnotempty(FileHashValue_s)
+| project TimeGenerated, workbenchName_s, FileName_s, FileHashValue_s, HostHostName_s
 ```
 
-**Option 2: Direct Query**
+### OAT: Credential Dumping Detection
+
 ```kql
-TrendMicro_XDR_WORKBENCH_CL
-| extend indicators_array = parse_json(indicators_s)
-| mv-expand indicator = indicators_array
-| where indicator.type == "file_sha256"
+TrendMicro_XDR_OAT_CL
+| where detail_filterRiskLevel_s == "high"
+| where detail_eventName_s contains "Credential"
+| project TimeGenerated, 
+    Endpoint = detail_endpointHostName_s,
+    Process = detail_processName_s,
+    CommandLine = detail_processCmd_s,
+    SHA256 = detail_processFileHashSha256_s
 ```
 
-See [docs/DEPLOYMENT-GUIDE-ENRICHED-TABLE.md](docs/DEPLOYMENT-GUIDE-ENRICHED-TABLE.md) for detailed enrichment options.
+### OAT: Process Tree Analysis
 
-## Configuration
+```kql
+TrendMicro_XDR_OAT_CL
+| where isnotempty(detail_processName_s)
+| project TimeGenerated,
+    Endpoint = detail_endpointHostName_s,
+    Process = detail_processName_s,
+    Parent = detail_parentName_s,
+    CommandLine = detail_processCmd_s
+```
 
-### Regional API Endpoints
+## 🌍 Supported Regions
 
-The connector supports multiple Trend Micro Vision One regions:
-
-| Region | Parameter Value | API Endpoint |
-|--------|----------------|--------------|
+| Region | Value | API Endpoint |
+|--------|-------|--------------|
 | United States | `US` | api.xdr.trendmicro.com |
-| United Kingdom | `UK` | api.uk.xdr.trendmicro.com |
-| Singapore | `SG` | api.sg.xdr.trendmicro.com |
+| United Kingdom / EU | `UK` | api.uk.xdr.trendmicro.com |
+| Singapore / APAC | `SG` | api.sg.xdr.trendmicro.com |
 | Canada | `CA` | api.ca.xdr.trendmicro.com |
 | Japan | `JP` | api.jp.xdr.trendmicro.com |
 
-### Polling Frequency
+## 📁 Repository Structure
 
-Default: **5 minutes**
-
-To modify, edit the Logic App recurrence trigger after deployment:
-1. Azure Portal → Logic Apps → `TrendMicro-XDR-Workbench-Connector`
-2. Logic App Designer → Recurrence trigger
-3. Change `Frequency` and `Interval`
-
-### Data Retention
-
-Data is retained according to your Log Analytics workspace retention policy (default: 30-90 days).
-
-To modify:
-```bash
-az monitor log-analytics workspace table update \
-  --resource-group <rg> \
-  --workspace-name <workspace> \
-  --name TrendMicro_XDR_WORKBENCH_CL \
-  --retention-time 90
+```
+templates/
+├── workbench/              # Workbench Alerts connector (modular)
+│   ├── mainTemplate.json
+│   ├── createUiDefinition.json
+│   └── components/         # 6 modular components
+│
+├── oat/                    # OAT connector (modular)
+│   ├── mainTemplate.json
+│   ├── createUiDefinition.json
+│   └── components/         # 5 modular components
+│
+├── legacy/                 # Archived old templates
+└── ARCHITECTURE.md         # Detailed architecture documentation
 ```
 
-## Monitoring and Troubleshooting
+## 🛠️ Advanced Deployment
 
-### Check Logic App Execution
+### Using Azure CLI
 
+**Workbench:**
 ```bash
-az logic workflow show \
-  --resource-group <rg> \
-  --name TrendMicro-XDR-Workbench-Connector
+az deployment group create \
+  --resource-group <your-rg> \
+  --template-uri https://raw.githubusercontent.com/nikhildubey-trend/trendai-sentinel-cdf-data-connector/main/templates/workbench/mainTemplate.json \
+  --parameters workspace=<workspace-name> trendaiRegion=US
 ```
 
-### View Run History
+**OAT:**
+```bash
+az deployment group create \
+  --resource-group <your-rg> \
+  --template-uri https://raw.githubusercontent.com/nikhildubey-trend/trendai-sentinel-cdf-data-connector/main/templates/oat/mainTemplate.json \
+  --parameters workspace=<workspace-name> trendaiRegion=US
+```
 
-Azure Portal → Logic Apps → `TrendMicro-XDR-Workbench-Connector` → Overview → Runs history
+### Testing Individual Components
 
-### Common Issues
-
-| Issue | Solution |
-|-------|----------|
-| No data after 10 minutes | Check API key validity, verify Trend Vision One region |
-| `401 Unauthorized` | Regenerate API key with SIEM role |
-| `Schema validation failed` | Ensure using latest ARM template version |
-| Missing IOC fields | Deploy enriched table or use saved query function |
-
-### Enable Diagnostic Logging
+Each component can be deployed independently for testing:
 
 ```bash
-az monitor diagnostic-settings create \
-  --resource <logic-app-resource-id> \
-  --name "LogicAppDiagnostics" \
-  --workspace <workspace-id> \
-  --logs '[{"category":"WorkflowRuntime","enabled":true}]'
+# Deploy just the custom table
+az deployment group create \
+  --template-file templates/workbench/components/table.json \
+  --parameters workspace=test-ws workspace-location=eastus
 ```
 
-## Integration with Sentinel Analytics
+## 🔧 Troubleshooting
 
-### Sample Analytics Rule
+### No data after 10 minutes
 
-```kql
-// High-severity Workbench alerts with file IOCs
-TrendMicro_XDR_WORKBENCH_CL
-| where TimeGenerated > ago(5m)
-| where severity_s in ("high", "critical")
-| extend indicators_array = parse_json(indicators_s)
-| mv-expand indicator = indicators_array
-| where indicator.type in ("file_sha256", "file_sha1", "md5")
-| project 
-    TimeGenerated,
-    workbenchName_s,
-    severity_s,
-    FileHash = tostring(indicator.value),
-    HostHostName_s,
-    workbenchLink_s
-```
+1. **Check API token**: Verify token has 'SIEM' role permissions
+2. **Check region**: Ensure correct Trend Vision One region selected
+3. **Check connector status**: Sentinel → Data connectors → View connector health
+4. **Check DCR ingestion**: Azure Monitor → Data Collection Rules → View metrics
 
-See [docs/COMPLETE-FIELD-MAPPING.md](docs/COMPLETE-FIELD-MAPPING.md) for all available fields.
+### Connection fails
 
-## Deployment Scripts
+- Ensure API token includes `Bearer ` prefix
+- Regenerate API token if expired
+- Verify workspace has Sentinel enabled
 
-### PowerShell
+### Missing IOC fields (Workbench)
 
-```powershell
-# scripts/deploy.ps1
-.\scripts\deploy.ps1 `
-  -ResourceGroup "sentinel-rg" `
-  -WorkspaceName "sentinel-law" `
-  -Location "eastus" `
-  -TrendRegion "US" `
-  -ApiKey "your-api-key"
-```
+- Use the parser function: `TrendMicroWorkbench_Complete()`
+- Parser extracts IOCs from dynamic columns automatically
 
-### Bash
+## 📚 Documentation
 
-```bash
-# scripts/deploy.sh
-./scripts/deploy.sh \
-  --resource-group sentinel-rg \
-  --workspace sentinel-law \
-  --location eastus \
-  --trend-region US \
-  --api-key your-api-key
-```
+- [Architecture Details](templates/ARCHITECTURE.md) - Deep dive into component design
+- [Workbench Modular Summary](MODULAR_TEMPLATE_SUMMARY.md) - Workbench implementation details
+- [OAT Modular Summary](OAT_MODULAR_SUMMARY.md) - OAT implementation details
 
-## Roadmap
+## 🤝 Support
 
-- [ ] Azure DevOps pipeline for automated deployment
-- [ ] Terraform module version
-- [ ] Bicep template conversion
-- [ ] Workbook templates for Trend Micro data visualization
-- [ ] Pre-built Analytics Rules package
-- [ ] Support for additional Trend Micro Vision One APIs (Endpoint Activity, Email Activity)
+- **Trend Vision One API**: [Trend Micro Support](https://www.trendmicro.com/support)
+- **Azure Sentinel**: [Microsoft Sentinel Documentation](https://learn.microsoft.com/azure/sentinel)
+- **Issues**: [GitHub Issues](https://github.com/nikhildubey-trend/trendai-sentinel-cdf-data-connector/issues)
 
-## Contributing
+## 📝 License
 
-Contributions are welcome! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for guidelines.
+This project is licensed under the MIT License.
 
-## License
+## 🏆 Credits
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
-
-## Support
-
-- **Issues**: [GitHub Issues](https://github.com/yourusername/TrendAI_Sentinel_public_data_Connector/issues)
-- **Trend Micro Vision One Docs**: [Official Documentation](https://docs.trendmicro.com/en-us/enterprise/trend-vision-one.aspx)
-- **Microsoft Sentinel Docs**: [Azure Sentinel Documentation](https://learn.microsoft.com/en-us/azure/sentinel/)
-
-## Acknowledgments
-
-- Trend Micro Vision One API Team
-- Microsoft Sentinel Community
-- Azure ARM Template Contributors
-
-## Related Resources
-
-- [Trend Micro Vision One API Reference](https://automation.trendmicro.com/xdr/api-v3)
-- [Azure Sentinel Data Connectors](https://learn.microsoft.com/en-us/azure/sentinel/connect-data-sources)
-- [MITRE ATT&CK Framework](https://attack.mitre.org/)
-- [Azure Monitor Data Collection Rules](https://learn.microsoft.com/en-us/azure/azure-monitor/essentials/data-collection-rule-overview)
+Built following Microsoft's [Codeless Connector Platform (CCP)](https://learn.microsoft.com/azure/sentinel/create-codeless-connector) best practices and [SentinelOne reference implementation](https://github.com/Azure/Azure-Sentinel/tree/master/Solutions/SentinelOne/Data%20Connectors/SentinelOne_ccp).
 
 ---
 
-**Maintained by**: [Your Name/Organization]  
+**Version**: 2.0.0  
 **Last Updated**: May 2026  
-**Version**: 2.0.1
+**Maintained by**: Trend Micro

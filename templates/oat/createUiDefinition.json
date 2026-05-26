@@ -1,0 +1,82 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/0.1.2-preview/CreateUIDefinition.MultiVm.json#",
+    "handler": "Microsoft.Azure.CreateUIDef",
+    "version": "0.1.2-preview",
+    "parameters": {
+        "config": {
+            "isWizard": false,
+            "basics": {
+                "description": "**Trend Vision One - OAT (Observed Attack Techniques)** data connector ingests MITRE ATT&CK mapped detections from Trend Micro Vision One into Microsoft Sentinel.\n\n**Data ingestion:** Observed Attack Techniques with full process trees, file hashes, network indicators, and MITRE ATT&CK mappings.\n\n**Post-deployment:** After installation, navigate to Microsoft Sentinel → Data connectors → Find 'Trend Micro Vision One - OAT' → Open connector page → Enter API token → Click Connect",
+                "subscription": {
+                    "resourceProviders": [
+                        "Microsoft.OperationsManagement",
+                        "Microsoft.OperationalInsights"
+                    ]
+                }
+            }
+        },
+        "basics": [
+            {
+                "name": "workspaceSelector",
+                "type": "Microsoft.Solutions.ResourceSelector",
+                "label": "Log Analytics Workspace",
+                "resourceType": "Microsoft.OperationalInsights/workspaces",
+                "required": true,
+                "toolTip": "Select the Log Analytics workspace where Microsoft Sentinel is enabled"
+            }
+        ],
+        "steps": [
+            {
+                "name": "trendConfig",
+                "label": "Trend Vision One Configuration",
+                "elements": [
+                    {
+                        "name": "trendaiRegion",
+                        "type": "Microsoft.Common.DropDown",
+                        "label": "Trend Vision One Region",
+                        "defaultValue": "United States",
+                        "toolTip": "Select the region where your Trend Vision One tenant is hosted",
+                        "constraints": {
+                            "required": true,
+                            "allowedValues": [
+                                {
+                                    "label": "United States",
+                                    "value": "US"
+                                },
+                                {
+                                    "label": "United Kingdom / European Union",
+                                    "value": "UK"
+                                },
+                                {
+                                    "label": "Singapore / Asia Pacific",
+                                    "value": "SG"
+                                },
+                                {
+                                    "label": "Canada",
+                                    "value": "CA"
+                                },
+                                {
+                                    "label": "Japan",
+                                    "value": "JP"
+                                }
+                            ]
+                        }
+                    },
+                    {
+                        "name": "infoMessage",
+                        "type": "Microsoft.Common.InfoBox",
+                        "options": {
+                            "icon": "Info",
+                            "text": "After deployment, you will need a Trend Vision One API token with 'SIEM' role permissions to connect the data source. Generate your API token from: Trend Vision One Console → Administration → API Keys"
+                        }
+                    }
+                ]
+            }
+        ],
+        "outputs": {
+            "workspace": "[basics('workspaceSelector').name]",
+            "workspace-location": "[basics('workspaceSelector').location]",
+            "trendaiRegion": "[steps('trendConfig').trendaiRegion]"
+        }
+    }
+}
