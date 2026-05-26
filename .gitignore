@@ -53,3 +53,4 @@ deployment-*.log
 # Local configuration overrides
 *-local.json
 local-config/
+.claude/

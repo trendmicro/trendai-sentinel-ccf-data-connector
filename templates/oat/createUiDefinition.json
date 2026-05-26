@@ -6,7 +6,7 @@
         "config": {
             "isWizard": false,
             "basics": {
-                "description": "**Trend Vision One - OAT (Observed Attack Techniques)** data connector ingests MITRE ATT&CK mapped detections from Trend Micro Vision One into Microsoft Sentinel.\n\n**Data ingestion:** Observed Attack Techniques with full process trees, file hashes, network indicators, and MITRE ATT&CK mappings.\n\n**Post-deployment:** After installation, navigate to Microsoft Sentinel → Data connectors → Find 'Trend Micro Vision One - OAT' → Open connector page → Enter API token → Click Connect",
+                "description": "**Trend Vision One - OAT (Observed Attack Techniques)** data connector ingests MITRE ATT&CK mapped detections from Trend Micro Vision One into Microsoft Sentinel.\n\n**Data ingestion:** Observed Attack Techniques with full process trees, file hashes, network indicators, and MITRE ATT&CK mappings.\n\n**Provide your Trend Vision One API token during deployment to enable the live poller.** If you leave it blank, the connector definition and supporting resources still deploy and you can attach credentials later from the Sentinel portal.",
                 "subscription": {
                     "resourceProviders": [
                         "Microsoft.OperationsManagement",
@@ -63,12 +63,46 @@
                         }
                     },
                     {
-                        "name": "infoMessage",
+                        "name": "apiKeyInfo",
                         "type": "Microsoft.Common.InfoBox",
                         "options": {
                             "icon": "Info",
-                            "text": "After deployment, you will need a Trend Vision One API token with 'SIEM' role permissions to connect the data source. Generate your API token from: Trend Vision One Console → Administration → API Keys"
+                            "text": "Generate your API token from: Trend Vision One Console → Administration → API Keys (SIEM role). Paste it below to enable the poller at deploy time. Leave it blank to defer credentials and attach them later via the Sentinel portal."
                         }
+                    },
+                    {
+                        "name": "apikey",
+                        "type": "Microsoft.Common.PasswordBox",
+                        "label": {
+                            "password": "Trend Vision One API Token",
+                            "confirmPassword": "Confirm API Token"
+                        },
+                        "toolTip": "Bearer token (without the 'Bearer' prefix). Leave blank to skip the live poller; the rest of the connector still deploys.",
+                        "constraints": {
+                            "required": false,
+                            "regex": "",
+                            "validationMessage": ""
+                        },
+                        "options": {
+                            "hideConfirmation": true
+                        }
+                    },
+                    {
+                        "name": "oatFilter",
+                        "type": "Microsoft.Common.TextBox",
+                        "label": "Optional TMV1-Filter",
+                        "defaultValue": "",
+                        "toolTip": "Optional TMV1-Filter expression sent on every OAT API call. Example: (riskLevel eq 'high'). Leave empty for no filter.",
+                        "constraints": {
+                            "required": false
+                        }
+                    },
+                    {
+                        "name": "excludeThirdPartyOat",
+                        "type": "Microsoft.Common.CheckBox",
+                        "label": "Exclude third-party OAT detections (productCode == 'tlc')",
+                        "defaultValue": true,
+                        "toolTip": "When checked, the DCR transform drops rows where productCode == 'tlc' (third-party linked sources). Uncheck to ingest everything."
                     }
                 ]
             }
@@ -76,7 +110,10 @@
         "outputs": {
             "workspace": "[basics('workspaceSelector').name]",
             "workspace-location": "[basics('workspaceSelector').location]",
-            "trendaiRegion": "[steps('trendConfig').trendaiRegion]"
+            "trendaiRegion": "[steps('trendConfig').trendaiRegion]",
+            "apikey": "[steps('trendConfig').apikey]",
+            "oatFilter": "[steps('trendConfig').oatFilter]",
+            "excludeThirdPartyOat": "[steps('trendConfig').excludeThirdPartyOat]"
         }
     }
 }

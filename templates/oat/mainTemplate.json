@@ -34,10 +34,31 @@
             "metadata": {
                 "description": "Trend Vision One region where your tenant is hosted"
             }
+        },
+        "apikey": {
+            "type": "securestring",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Trend Vision One API token (without 'Bearer' prefix). Required to deploy the active poller. Leave empty to deploy only the connector definition + table + DCR and connect later via the Sentinel portal."
+            }
+        },
+        "oatFilter": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Optional TMV1-Filter expression for the OAT API. Example: (riskLevel eq 'high'). Leave empty for no filter."
+            }
+        },
+        "excludeThirdPartyOat": {
+            "type": "bool",
+            "defaultValue": true,
+            "metadata": {
+                "description": "Exclude OAT detections from third-party linked sources (productCode == 'tlc'). Defaults to true."
+            }
         }
     },
     "variables": {
-        "baseUrl": "https://raw.githubusercontent.com/nikhildubey-trend/trendai-sentinel-cdf-data-connector/main/templates/oat/components"
+        "baseUrl": "https://raw.githubusercontent.com/trendmicro/trendai-sentinel-ccf-data-connector/main/templates/oat/components"
     },
     "resources": [
         {
@@ -108,7 +129,8 @@
                     "workspace": {"value": "[parameters('workspace')]"},
                     "workspace-location": {"value": "[parameters('workspace-location')]"},
                     "dceName": {"value": "[reference('dataCollectionEndpoint').outputs.dceName.value]"},
-                    "tableName": {"value": "[reference('customTable').outputs.tableName.value]"}
+                    "tableName": {"value": "[reference('customTable').outputs.tableName.value]"},
+                    "excludeThirdPartyOat": {"value": "[parameters('excludeThirdPartyOat')]"}
                 }
             }
         },
@@ -129,6 +151,34 @@
                 "parameters": {
                     "workspace": {"value": "[parameters('workspace')]"},
                     "workspace-location": {"value": "[parameters('workspace-location')]"}
+                }
+            }
+        },
+        {
+            "name": "dataConnector",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2022-09-01",
+            "condition": "[not(empty(parameters('apikey')))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments', 'connectorDefinition')]",
+                "[resourceId('Microsoft.Resources/deployments', 'dataCollectionRule')]",
+                "[resourceId('Microsoft.Resources/deployments', 'dataCollectionEndpoint')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('baseUrl'), '/data-connector.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "workspace": {"value": "[parameters('workspace')]"},
+                    "workspace-location": {"value": "[parameters('workspace-location')]"},
+                    "apikey": {"value": "[parameters('apikey')]"},
+                    "trendaiRegion": {"value": "[parameters('trendaiRegion')]"},
+                    "oatFilter": {"value": "[parameters('oatFilter')]"},
+                    "dceEndpoint": {"value": "[reference('dataCollectionEndpoint').outputs.dceEndpoint.value]"},
+                    "dcrImmutableId": {"value": "[reference('dataCollectionRule').outputs.dcrImmutableId.value]"},
+                    "streamName": {"value": "[reference('dataCollectionRule').outputs.streamName.value]"}
                 }
             }
         }

@@ -55,7 +55,7 @@ templates/
 ```json
 {
   "variables": {
-    "baseUrl": "https://raw.githubusercontent.com/nikhildubey-trend/..."
+    "baseUrl": "https://raw.githubusercontent.com/trendmicro/..."
   },
   "resources": [
     {
@@ -317,7 +317,7 @@ mainTemplate.json references components via GitHub URLs:
 ```json
 {
   "templateLink": {
-    "uri": "https://raw.githubusercontent.com/nikhildubey-trend/.../table.json",
+    "uri": "https://raw.githubusercontent.com/trendmicro/.../table.json",
     "contentVersion": "1.0.0.0"
   }
 }

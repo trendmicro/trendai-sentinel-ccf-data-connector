@@ -34,10 +34,24 @@
             "metadata": {
                 "description": "Trend Vision One region where your tenant is hosted"
             }
+        },
+        "apikey": {
+            "type": "securestring",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Trend Vision One API token (without 'Bearer' prefix). Required to deploy the active poller. Leave empty to deploy only the connector definition + table + DCR + parser, and attach credentials later via the Sentinel portal."
+            }
+        },
+        "workbenchFilter": {
+            "type": "string",
+            "defaultValue": "",
+            "metadata": {
+                "description": "Optional TMV1-Filter expression for the Workbench alerts API. Example: (severity ge 'high'). Leave empty for no filter."
+            }
         }
     },
     "variables": {
-        "baseUrl": "https://raw.githubusercontent.com/nikhildubey-trend/trendai-sentinel-cdf-data-connector/main/templates/workbench/components"
+        "baseUrl": "https://raw.githubusercontent.com/trendmicro/trendai-sentinel-ccf-data-connector/main/templates/workbench/components"
     },
     "resources": [
         {
@@ -180,6 +194,34 @@
                     "workspace-location": {
                         "value": "[parameters('workspace-location')]"
                     }
+                }
+            }
+        },
+        {
+            "name": "dataConnector",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2022-09-01",
+            "condition": "[not(empty(parameters('apikey')))]",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments', 'connectorDefinition')]",
+                "[resourceId('Microsoft.Resources/deployments', 'dataCollectionRule')]",
+                "[resourceId('Microsoft.Resources/deployments', 'dataCollectionEndpoint')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('baseUrl'), '/data-connector.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "workspace": {"value": "[parameters('workspace')]"},
+                    "workspace-location": {"value": "[parameters('workspace-location')]"},
+                    "apikey": {"value": "[parameters('apikey')]"},
+                    "trendaiRegion": {"value": "[parameters('trendaiRegion')]"},
+                    "workbenchFilter": {"value": "[parameters('workbenchFilter')]"},
+                    "dceEndpoint": {"value": "[reference('dataCollectionEndpoint').outputs.dceEndpoint.value]"},
+                    "dcrImmutableId": {"value": "[reference('dataCollectionRule').outputs.dcrImmutableId.value]"},
+                    "streamName": {"value": "[reference('dataCollectionRule').outputs.streamName.value]"}
                 }
             }
         }

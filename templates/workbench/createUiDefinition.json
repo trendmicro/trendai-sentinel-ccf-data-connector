@@ -104,11 +104,38 @@
                         "name": "dataconnectors-link",
                         "type": "Microsoft.Common.TextBlock",
                         "options": {
-                            "text": "After deployment, navigate to Microsoft Sentinel → Data connectors → 'Trend Vision One - Workbench Alerts' to connect with your API token.",
+                            "text": "Provide your Trend Vision One API token below to enable the live poller at deploy time. If you leave it blank, the connector definition still deploys and you can connect later from the Sentinel portal.",
                             "link": {
                                 "label": "Learn more about getting API tokens",
                                 "uri": "https://docs.trendmicro.com/en-us/enterprise/trend-vision-one/administrator/api-access-management.aspx"
                             }
+                        }
+                    },
+                    {
+                        "name": "apikey",
+                        "type": "Microsoft.Common.PasswordBox",
+                        "label": {
+                            "password": "Trend Vision One API Token",
+                            "confirmPassword": "Confirm API Token"
+                        },
+                        "toolTip": "Bearer token (without the 'Bearer' prefix). Leave blank to skip the live poller; the rest of the connector still deploys.",
+                        "constraints": {
+                            "required": false,
+                            "regex": "",
+                            "validationMessage": ""
+                        },
+                        "options": {
+                            "hideConfirmation": true
+                        }
+                    },
+                    {
+                        "name": "workbenchFilter",
+                        "type": "Microsoft.Common.TextBox",
+                        "label": "Optional TMV1-Filter",
+                        "defaultValue": "",
+                        "toolTip": "Optional TMV1-Filter expression sent on every Workbench API call. Example: (severity ge 'high'). Leave empty for no filter.",
+                        "constraints": {
+                            "required": false
                         }
                     }
                 ]
@@ -117,7 +144,9 @@
         "outputs": {
             "workspace-location": "[location()]",
             "workspace": "[basics('workspace')]",
-            "trendaiRegion": "[steps('dataconnectors').trendaiRegion]"
+            "trendaiRegion": "[steps('dataconnectors').trendaiRegion]",
+            "apikey": "[steps('dataconnectors').apikey]",
+            "workbenchFilter": "[steps('dataconnectors').workbenchFilter]"
         }
     }
 }
