@@ -1,5 +1,7 @@
 # Trend Vision One - Microsoft Sentinel Data Connectors
 
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+
 **Workbench Alerts** &nbsp; [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ftrendmicro%2Ftrendai-sentinel-ccf-data-connector%2Fmain%2Ftemplates%2Fworkbench%2FmainTemplate.json/createUIDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2Ftrendmicro%2Ftrendai-sentinel-ccf-data-connector%2Fmain%2Ftemplates%2Fworkbench%2FcreateUiDefinition.json) [![Deploy to Azure US Gov](https://aka.ms/deploytoazuregovbutton)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ftrendmicro%2Ftrendai-sentinel-ccf-data-connector%2Fmain%2Ftemplates%2Fworkbench%2FmainTemplate.json/createUIDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2Ftrendmicro%2Ftrendai-sentinel-ccf-data-connector%2Fmain%2Ftemplates%2Fworkbench%2FcreateUiDefinition.json)
 
 **OAT (Observed Attack Techniques)** &nbsp; [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ftrendmicro%2Ftrendai-sentinel-ccf-data-connector%2Fmain%2Ftemplates%2Foat%2FmainTemplate.json/createUIDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2Ftrendmicro%2Ftrendai-sentinel-ccf-data-connector%2Fmain%2Ftemplates%2Foat%2FcreateUiDefinition.json) [![Deploy to Azure US Gov](https://aka.ms/deploytoazuregovbutton)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ftrendmicro%2Ftrendai-sentinel-ccf-data-connector%2Fmain%2Ftemplates%2Foat%2FmainTemplate.json/createUIDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2Ftrendmicro%2Ftrendai-sentinel-ccf-data-connector%2Fmain%2Ftemplates%2Foat%2FcreateUiDefinition.json)
@@ -257,10 +259,19 @@ az deployment group create \
 - **Trend Vision One API**: [Trend Micro Support](https://www.trendmicro.com/support)
 - **Azure Sentinel**: [Microsoft Sentinel Documentation](https://learn.microsoft.com/azure/sentinel)
 - **Issues**: [GitHub Issues](https://github.com/trendmicro/trendai-sentinel-ccf-data-connector/issues)
+- **Contributing**: see [CONTRIBUTING.md](CONTRIBUTING.md)
+
+## 🤝 Contributing
+
+Pull requests are welcome — see [CONTRIBUTING.md](CONTRIBUTING.md) and our [Code of Conduct](CODE_OF_CONDUCT.md).
+
+## 🔒 Security
+
+Found a vulnerability? Please **do not** open a public issue — see [SECURITY.md](SECURITY.md) for the private reporting process.
 
 ## 📝 License
 
-This project is licensed under the MIT License.
+This project is licensed under the [MIT License](LICENSE) — see the LICENSE file for details.
 
 ## 🏆 Credits
 

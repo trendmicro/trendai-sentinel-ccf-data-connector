@@ -1,0 +1,25 @@
+# Dependabot configuration.
+# Docs: https://docs.github.com/en/code-security/dependabot/dependabot-version-updates/configuration-options-for-the-dependabot.yml-file
+#
+# This repo ships ARM JSON + KQL — no language package manifests. The only
+# moving dependencies are pinned action versions in our GitHub Actions
+# workflows, so we only enable the `github-actions` ecosystem here.
+
+version: 2
+updates:
+  - package-ecosystem: "github-actions"
+    directory: "/"
+    schedule:
+      interval: "weekly"
+      day: "monday"
+      time: "06:00"
+      timezone: "Etc/UTC"
+    open-pull-requests-limit: 5
+    labels:
+      - "dependencies"
+      - "github-actions"
+    commit-message:
+      prefix: "ci"
+      include: "scope"
+    reviewers:
+      - "trendmicro/mxdr-team"
