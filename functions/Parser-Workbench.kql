@@ -183,8 +183,7 @@ TrendMicro_XDR_WORKBENCH_CL
     serverCount_d = coalesce(serverCount_extracted, 0),
     accountCount_d = coalesce(accountCount_extracted, 0),
     emailAddressCount_d = coalesce(emailAddressCount_extracted, 0)
-// Final projection with exact backward-compatible schema
-| project
+| project // Final projection with exact backward-compatible schema
     TimeGenerated,
     SourceSystem,
     MG,
