@@ -54,6 +54,8 @@ Azure will automatically deploy:
 4. Data Collection Rule (DCR) with data transformation
 5. Connector definition in Sentinel portal
 6. Parser function (Workbench only)
+7. Analytic rule template (disabled by default)
+8. Workbook dashboard for monitoring
 
 ⏱️ **Deployment time**: 3-5 minutes
 
@@ -68,6 +70,41 @@ After deployment completes:
 5. Click **Connect**
 
 🎉 **Data will start flowing in 5-10 minutes!**
+
+### Step 5: Enable Analytic Rules (Optional)
+
+Each connector includes an **Analytic Rule** that automatically creates incidents:
+
+1. Navigate to **Microsoft Sentinel → Analytics**
+2. Search for **"Trend Vision One"**
+3. Find the rule:
+   - **Workbench**: "Create Incident for Workbench Alerts"
+   - **OAT**: "Create Incident for High-Risk OAT Detections"
+4. Click the rule → **Edit** → **Enable** → **Save**
+
+**What it does:**
+- Runs every 5 minutes
+- Creates incidents with mapped entities (Account, File, Process, IP, Host)
+- Groups related alerts by WorkbenchID/EventID
+- Adds custom details for investigations
+
+### Step 6: View Dashboards (Optional)
+
+Each connector includes a **Workbook** dashboard:
+
+1. Navigate to **Microsoft Sentinel → Workbooks**
+2. Click **My workbooks** tab
+3. Find:
+   - **Workbench**: "TrendVisionOneWorkbenchOverview"
+   - **OAT**: "TrendVisionOneOATOverview"
+4. Click **View saved workbook**
+
+**Visualizations include:**
+- Alert/Detection trends over time
+- Severity/Risk level distribution
+- Top affected hosts/endpoints
+- MITRE ATT&CK tactics and techniques (OAT only)
+- Detection model usage (Workbench only)
 
 ## 📊 Verify Data Ingestion
 
@@ -100,7 +137,9 @@ mainTemplate.json (Orchestrator)
   ├─> dce.json                    # Data Collection Endpoint
   ├─> dcr.json                    # Data Collection Rule (transforms data)
   ├─> connector-definition.json   # Connector UI in portal
-  └─> parser-function.json        # KQL parser (Workbench only)
+  ├─> parser-function.json        # KQL parser (Workbench only)
+  ├─> analytic-rule.json          # Incident creation rule (disabled)
+  └─> workbook.json               # Monitoring dashboard
 ```
 
 **Benefits:**
