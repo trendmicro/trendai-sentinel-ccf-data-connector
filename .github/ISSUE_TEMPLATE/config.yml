@@ -1,0 +1,14 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Security vulnerability
+    url: https://www.trendmicro.com/en_us/about/trust-center/responsible-disclosure.html
+    about: Please do NOT file security issues publicly. See SECURITY.md for the private reporting process.
+  - name: Trend Vision One product support
+    url: https://www.trendmicro.com/support
+    about: For Vision One product issues unrelated to this Sentinel connector.
+  - name: Microsoft Sentinel platform issues
+    url: https://learn.microsoft.com/azure/sentinel
+    about: For Sentinel or Azure platform questions not specific to this connector.
+  - name: GitHub Discussions
+    url: https://github.com/trendmicro/trendai-sentinel-ccf-data-connector/discussions
+    about: Ask a question or share an idea with the community.
