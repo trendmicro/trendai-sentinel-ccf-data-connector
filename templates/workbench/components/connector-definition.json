@@ -66,10 +66,7 @@
                         "lastDataReceivedQuery": "[concat(variables('tableName'), ' | summarize Time = max(TimeGenerated) | where isnotempty(Time)')]"
                     }],
                     "connectivityCriteria": [{
-                        "type": "IsConnectedQuery",
-                        "value": [
-                            "[concat(variables('tableName'), ' | summarize LastLogReceived = max(TimeGenerated) | project IsConnected = LastLogReceived > ago(30d)')]"
-                        ]
+                        "type": "HasDataConnectors"
                     }],
                     "graphQueries": [{
                         "metricName": "Total data received",
