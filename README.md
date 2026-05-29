@@ -6,6 +6,42 @@
 
 **OAT (Observed Attack Techniques)** &nbsp; [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ftrendmicro%2Ftrendai-sentinel-ccf-data-connector%2Fmain%2Ftemplates%2Foat%2FmainTemplate.json/createUIDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2Ftrendmicro%2Ftrendai-sentinel-ccf-data-connector%2Fmain%2Ftemplates%2Foat%2FcreateUiDefinition.json) [![Deploy to Azure US Gov](https://aka.ms/deploytoazuregovbutton)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ftrendmicro%2Ftrendai-sentinel-ccf-data-connector%2Fmain%2Ftemplates%2Foat%2FmainTemplate.json/createUIDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2Ftrendmicro%2Ftrendai-sentinel-ccf-data-connector%2Fmain%2Ftemplates%2Foat%2FcreateUiDefinition.json)
 
+### Test Deploy (Azure Storage-hosted, while repo is private)
+
+Templates served from a public Azure Blob container so the portal can fetch them without GitHub auth. Remove once the repo goes public.
+
+**Before clicking the buttons below, publish the latest templates to the blob container** so the deploy URLs serve current code.
+
+**One-time setup** (per developer):
+
+```bash
+# 1. Install Azure CLI if you don't have it
+#    macOS:  brew install azure-cli
+#    Linux:  https://learn.microsoft.com/cli/azure/install-azure-cli-linux
+
+# 2. Log in and select the subscription that owns the trendaiccf45 storage account
+az login
+az account set --subscription "<subscription-name-or-id>"
+```
+
+Required access: at least **Contributor** (or **Storage Account Key Operator Service Role**) on the `trendaiccf45` storage account, so `az storage account keys list` works. If you only have data-plane access, use a SAS token instead — see [scripts/publish-templates.sh](scripts/publish-templates.sh).
+
+**Each time you change templates**, publish them:
+
+```bash
+export AZURE_STORAGE_KEY="$(az storage account keys list \
+  --account-name trendaiccf45 \
+  --query '[0].value' -o tsv)"
+
+./scripts/publish-templates.sh
+```
+
+The script stages `templates/`, rewrites the nested `baseUrl` from the GitHub raw URL to the blob URL, and uploads to `trendaiccf45/arm-templates/`.
+
+**Workbench Alerts** &nbsp; [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Ftrendaiccf45.blob.core.windows.net%2Farm-templates%2Fworkbench%2FmainTemplate.json/createUIDefinitionUri/https%3A%2F%2Ftrendaiccf45.blob.core.windows.net%2Farm-templates%2Fworkbench%2FcreateUiDefinition.json)
+
+**OAT (Observed Attack Techniques)** &nbsp; [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Ftrendaiccf45.blob.core.windows.net%2Farm-templates%2Foat%2FmainTemplate.json/createUIDefinitionUri/https%3A%2F%2Ftrendaiccf45.blob.core.windows.net%2Farm-templates%2Foat%2FcreateUiDefinition.json)
+
 Production-ready data connectors for ingesting **Trend Vision One** security data into **Microsoft Sentinel** using Azure's Codeless Connector Platform (CCP).
 
 ## 🚀 Quick Deploy
