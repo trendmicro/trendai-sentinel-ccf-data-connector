@@ -34,7 +34,8 @@ templates/
 │       ├── table.json                  # 139 columns
 │       ├── dce.json                    # Data Collection Endpoint
 │       ├── dcr.json                    # Data Collection Rule + transform
-│       └── connector-definition.json   # Portal UI definition
+│       ├── connector-definition.json   # Portal UI definition
+│       └── parser-function.json        # Universal parser (old + new OAT data)
 │
 └── legacy/                             # Archived old templates
 ```
@@ -162,21 +163,33 @@ Creates connector UI in Sentinel portal.
 
 **Outputs**: `connectorId`
 
-#### F. parser-function.json (Workbench only)
+#### F. parser-function.json (Workbench and OAT)
 
-Deploys KQL saved function for IOC extraction.
+Deploys a KQL saved function. Both connectors ship one, and both are **universal** —
+they auto-detect the data shape and return one stable schema across old (legacy V1
+Azure Function) and new (CCF) data.
 
 **Resource**: `Microsoft.OperationalInsights/workspaces/savedSearches`
 
-**Function**: `TrendMicroWorkbench_Complete()`
+**Workbench function**: `TrendMicroWorkbench_Complete()` — extracts IOCs from the dynamic
+columns (indicators, entities, matchedRules), falling back to the stringified `*_s`
+columns for old data.
 
-**Purpose**: Extracts IOCs from dynamic columns (indicators, entities, matchedRules)
-
-**Usage**:
 ```kql
 TrendMicroWorkbench_Complete()
 | where severity_s == "critical"
 | where isnotempty(FileHashValue_s)
+```
+
+**OAT function**: `TrendMicroOAT_Complete()` — returns the full flat `detail_*` schema,
+preferring the typed flat column and falling back to re-deriving each field from the
+detail payload (`detail` dynamic, `detail_s` string, or `RawData`). Adds convenience
+columns `mitreTacticIds_s` / `mitreTechniqueIds_s`.
+
+```kql
+TrendMicroOAT_Complete()
+| where detail_filterRiskLevel_s == "high"
+| project TimeGenerated, detail_endpointHostName_s, detail_processCmd_s
 ```
 
 **Outputs**: `functionName`
@@ -200,7 +213,7 @@ Deployment begins:
   3. dce                     ✓ (parallel with #2)
   4. dcr                     ✓ (depends on #2, #3)
   5. connector-definition    ✓ (depends on #1, #4)
-  6. parser-function         ✓ (depends on #2, Workbench only)
+  6. parser-function         ✓ (depends on #2; Workbench + OAT)
         ↓
 Deployment complete (3-5 min)
         ↓
@@ -240,18 +253,20 @@ table ───────┐
     └──→ dcr │
          ↓   │
 connector-definition
+         ↓
+    parser-function
 ```
 
 ## Comparison: Workbench vs OAT
 
 | Aspect | Workbench | OAT |
 |--------|-----------|-----|
-| Components | 6 | 5 |
+| Components | 6 | 6 |
 | Table Columns | 56 | 139 |
 | Input Stream Fields | 19 | 9 |
 | Transform Complexity | Moderate | Very High |
 | Dynamic Columns | Yes (indicators, entities, matchedRules) | No (all flattened) |
-| Parser Function | Yes (IOC extraction) | No (not needed) |
+| Parser Function | Yes (IOC extraction, universal old+new) | Yes (universal old+new normalizer) |
 | API Endpoint | /v3.0/workbench/alerts | /v3.0/oat/detections |
 | Data Volume | Medium | High |
 
