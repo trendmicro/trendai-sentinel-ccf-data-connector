@@ -10,7 +10,7 @@
         }
     },
     "variables": {
-        "tableName": "TrendMicro_XDR_OAT_CL"
+        "tableName": "TrendMicro_XDR_OAT_V2_CL"
     },
     "resources": [
         {

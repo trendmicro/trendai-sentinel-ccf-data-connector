@@ -25,28 +25,28 @@
                     "title": "Trend Micro Vision One - OAT (Production Safe)",
                     "publisher": "Trend Micro",
                     "descriptionMarkdown": "**V1-compatible** CCF connector for Observed Attack Techniques. Column names exactly match the legacy V1 Azure Function connector (detail_*_s prefix, endpoint_ips_s/endpoint_name_s/endpoint_guid_g object expansion, xdrCustomerId_g lowercase). Full payload also preserved as `RawData` for fallback parsing.",
-                    "graphQueriesTableName": "TrendMicro_XDR_OAT_CL",
+                    "graphQueriesTableName": "TrendMicro_XDR_OAT_V2_CL",
                     "dataTypes": [
                         {
-                            "name": "TrendMicro_XDR_OAT_CL",
-                            "lastDataReceivedQuery": "TrendMicro_XDR_OAT_CL | summarize Time = max(TimeGenerated) | where isnotempty(Time)"
+                            "name": "TrendMicro_XDR_OAT_V2_CL",
+                            "lastDataReceivedQuery": "TrendMicro_XDR_OAT_V2_CL | summarize Time = max(TimeGenerated) | where isnotempty(Time)"
                         }
                     ],
                     "graphQueries": [
                         {
                             "metricName": "Total data received",
-                            "legend": "TrendMicro_XDR_OAT_CL",
-                            "baseQuery": "TrendMicro_XDR_OAT_CL"
+                            "legend": "TrendMicro_XDR_OAT_V2_CL",
+                            "baseQuery": "TrendMicro_XDR_OAT_V2_CL"
                         }
                     ],
                     "sampleQueries": [
                         {
                             "description": "All OAT Detections",
-                            "query": "TrendMicro_XDR_OAT_CL | sort by TimeGenerated desc | take 10"
+                            "query": "TrendMicro_XDR_OAT_V2_CL | sort by TimeGenerated desc | take 10"
                         },
                         {
                             "description": "High Risk Credential Dumping (V1-compatible)",
-                            "query": "TrendMicro_XDR_OAT_CL | where detail_filterRiskLevel_s == 'high' | project TimeGenerated, detail_endpointHostName_s, detail_processCmd_s, detail_objectCmd_s, detail_processFileHashSha256_s"
+                            "query": "TrendMicro_XDR_OAT_V2_CL | where detail_filterRiskLevel_s == 'high' | project TimeGenerated, detail_endpointHostName_s, detail_processCmd_s, detail_objectCmd_s, detail_processFileHashSha256_s"
                         }
                     ],
                     "connectivityCriteria": [

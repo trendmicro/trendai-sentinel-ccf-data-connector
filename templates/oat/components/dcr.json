@@ -36,7 +36,7 @@
             "properties": {
                 "dataCollectionEndpointId": "[resourceId('Microsoft.Insights/dataCollectionEndpoints', parameters('dceName'))]",
                 "streamDeclarations": {
-                    "Custom-TrendMicro_XDR_OAT_CL": {
+                    "Custom-TrendMicro_XDR_OAT_V2_CL": {
                         "columns": [
                             {
                                 "name": "source",
@@ -92,13 +92,13 @@
                 "dataFlows": [
                     {
                         "streams": [
-                            "Custom-TrendMicro_XDR_OAT_CL"
+                            "Custom-TrendMicro_XDR_OAT_V2_CL"
                         ],
                         "destinations": [
                             "clv2ws1"
                         ],
                         "transformKql": "[concat('source | extend d = detail', if(parameters('excludeThirdPartyOat'), ' | where tostring(productCode) != ''tlc''', ''), ' | extend ', variables('oatTransformBody'))]",
-                        "outputStream": "Custom-TrendMicro_XDR_OAT_CL"
+                        "outputStream": "Custom-TrendMicro_XDR_OAT_V2_CL"
                     }
                 ]
             }
@@ -119,7 +119,7 @@
         },
         "streamName": {
             "type": "string",
-            "value": "Custom-TrendMicro_XDR_OAT_CL"
+            "value": "Custom-TrendMicro_XDR_OAT_V2_CL"
         }
     }
 }
