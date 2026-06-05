@@ -33,7 +33,7 @@
         }
     },
     "variables": {
-        "tableName": "TrendMicro_XDR_WORKBENCH_CL",
+        "tableName": "TrendMicro_XDR_WORKBENCH_V2_CL",
         "dceName": "TrendMicro-XDR-DCE",
         "dcrName": "TrendMicro-XDR-Workbench-DCR",
         "connectorId": "TrendMicro_XDR_Workbench",
@@ -137,7 +137,7 @@
             "properties": {
                 "dataCollectionEndpointId": "[resourceId('Microsoft.Insights/dataCollectionEndpoints', variables('dceName'))]",
                 "streamDeclarations": {
-                    "Custom-TrendMicro_XDR_WORKBENCH_CL": {
+                    "Custom-TrendMicro_XDR_WORKBENCH_V2_CL": {
                         "columns": [
                             {"name": "id", "type": "string"},
                             {"name": "schemaVersion", "type": "string"},
@@ -168,10 +168,10 @@
                     }]
                 },
                 "dataFlows": [{
-                    "streams": ["Custom-TrendMicro_XDR_WORKBENCH_CL"],
+                    "streams": ["Custom-TrendMicro_XDR_WORKBENCH_V2_CL"],
                     "destinations": ["clv2ws1"],
                     "transformKql": "source | extend TimeGenerated = todatetime(createdDateTime) | extend SourceSystem = 'RestAPI' | extend Computer = '' | extend MG = '' | extend ManagementGroupName = '' | extend RawData = tostring(indicators) | extend workbenchId_s = tostring(id) | extend schemaVersion_s = tostring(schemaVersion) | extend investigationStatus_s = tostring(investigationStatus) | extend alertStatus_s = tostring(status) | extend investigationResult_s = tostring(investigationResult) | extend workbenchLink_s = tostring(workbenchLink) | extend alertProvider_s = tostring(alertProvider) | extend modelId_g = tostring(modelId) | extend modelId_s = tostring(modelId) | extend model_s = tostring(model) | extend workbenchName_s = tostring(model) | extend modelType_s = tostring(modelType) | extend priorityScore_d = todouble(score) | extend severity_s = tostring(severity) | extend createdTime_t = todatetime(createdDateTime) | extend updatedTime_t = todatetime(updatedDateTime) | extend alertTriggerTimestamp_t = todatetime(createdDateTime) | extend workbenchCompleteTimestamp_t = todatetime(updatedDateTime) | extend incidentId_s = tostring(incidentId) | extend description_s = tostring(description) | extend desktopCount_d = todouble(impactScope.desktopCount) | extend serverCount_d = todouble(impactScope.serverCount) | extend accountCount_d = todouble(impactScope.accountCount) | extend emailAddressCount_d = todouble(impactScope.emailAddressCount) | extend containerCount_d = todouble(impactScope.containerCount) | extend cloudIdentityCount_d = todouble(impactScope.cloudIdentityCount) | extend cloudWorkloadCount_d = todouble(impactScope.cloudWorkloadCount) | extend indicators_dynamic = indicators | extend indicators_s = tostring(indicators) | extend impactScope_s = tostring(impactScope) | extend impactScope_Summary_s = tostring(impactScope) | extend entities = impactScope.entities | extend matchedRules_dynamic = matchedRules | extend matchedRules_s = tostring(matchedRules) | extend xdrCustomerID_g = '' | extend FileName_s = '' | extend FileHashValue_s = '' | extend DomainName_s = '' | extend FileDirectory_s = '' | extend IPAddress = '' | extend URL_s = '' | extend HostHostName_s = '' | extend ProcessCommandLine_s = '' | extend RegistryKey_s = '' | extend RegistryValue_s = '' | extend RegistryValueName_s = '' | extend UserAccountNTDomain_s = '' | extend UserAccountName_s = '' | extend MailboxPrimaryAddress_s = '' | extend MalwareName_s = '' | extend indicators = indicators_dynamic | extend matchedRules = matchedRules_dynamic | project-away id, schemaVersion, investigationStatus, status, investigationResult, workbenchLink, alertProvider, modelId, model, modelType, score, severity, createdDateTime, updatedDateTime, incidentId, description, impactScope, indicators_dynamic, matchedRules_dynamic",
-                    "outputStream": "Custom-TrendMicro_XDR_WORKBENCH_CL"
+                    "outputStream": "Custom-TrendMicro_XDR_WORKBENCH_V2_CL"
                 }]
             }
         },
@@ -190,24 +190,24 @@
                     "title": "TrendAI Vision One - Workbench Data Connector",
                     "publisher": "Trend AI",
                     "descriptionMarkdown": "**Microsoft-recommended architecture**: DCR transforms scalar fields, arrays stored as dynamic columns. Post-deployment: create 3 saved KQL functions for IOC/entity extraction. Fully backward-compatible schema.",
-                    "graphQueriesTableName": "TrendMicro_XDR_WORKBENCH_CL",
+                    "graphQueriesTableName": "TrendMicro_XDR_WORKBENCH_V2_CL",
                     "dataTypes": [{
-                        "name": "TrendMicro_XDR_WORKBENCH_CL",
-                        "lastDataReceivedQuery": "TrendMicro_XDR_WORKBENCH_CL | summarize Time = max(TimeGenerated) | where isnotempty(Time)"
+                        "name": "TrendMicro_XDR_WORKBENCH_V2_CL",
+                        "lastDataReceivedQuery": "TrendMicro_XDR_WORKBENCH_V2_CL | summarize Time = max(TimeGenerated) | where isnotempty(Time)"
                     }],
                     "graphQueries": [{
                         "metricName": "Total data received",
-                        "legend": "TrendMicro_XDR_WORKBENCH_CL",
-                        "baseQuery": "TrendMicro_XDR_WORKBENCH_CL"
+                        "legend": "TrendMicro_XDR_WORKBENCH_V2_CL",
+                        "baseQuery": "TrendMicro_XDR_WORKBENCH_V2_CL"
                     }],
                     "sampleQueries": [
                         {
                             "description": "All Workbench Alerts (Raw Table)",
-                            "query": "TrendMicro_XDR_WORKBENCH_CL | take 10"
+                            "query": "TrendMicro_XDR_WORKBENCH_V2_CL | take 10"
                         },
                         {
                             "description": "High/Critical Severity Alerts",
-                            "query": "TrendMicro_XDR_WORKBENCH_CL | where severity_s in ('high', 'critical') | project TimeGenerated, workbenchId_s, workbenchName_s, severity_s, priorityScore_d"
+                            "query": "TrendMicro_XDR_WORKBENCH_V2_CL | where severity_s in ('high', 'critical') | project TimeGenerated, workbenchId_s, workbenchName_s, severity_s, priorityScore_d"
                         }
                     ],
                     "connectivityCriteria": [{
@@ -274,9 +274,9 @@
             "kind": "RestApiPoller",
             "properties": {
                 "connectorDefinitionName": "[variables('connectorId')]",
-                "dataType": "TrendMicro_XDR_WORKBENCH_CL",
+                "dataType": "TrendMicro_XDR_WORKBENCH_V2_CL",
                 "dcrConfig": {
-                    "streamName": "Custom-TrendMicro_XDR_WORKBENCH_CL",
+                    "streamName": "Custom-TrendMicro_XDR_WORKBENCH_V2_CL",
                     "dataCollectionEndpoint": "[reference(resourceId('Microsoft.Insights/dataCollectionEndpoints', variables('dceName')), '2021-09-01-preview').logsIngestion.endpoint]",
                     "dataCollectionRuleImmutableId": "[reference(resourceId('Microsoft.Insights/dataCollectionRules', variables('dcrName')), '2021-09-01-preview').immutableId]"
                 },

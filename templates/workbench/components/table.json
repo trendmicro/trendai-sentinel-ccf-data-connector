@@ -17,7 +17,7 @@
         }
     },
     "variables": {
-        "tableName": "TrendMicro_XDR_WORKBENCH_CL"
+        "tableName": "TrendMicro_XDR_WORKBENCH_V2_CL"
     },
     "resources": [
         {
