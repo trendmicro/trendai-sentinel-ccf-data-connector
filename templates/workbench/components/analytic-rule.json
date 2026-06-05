@@ -29,7 +29,7 @@
                 "description": "This Query creates an incident based on Trend Vision One Workbench Alerts and maps the impacted entities for Microsoft Sentinel usage.",
                 "displayName": "Trend Vision One - Create Incident for Workbench Alerts",
                 "enabled": false,
-                "query": "TrendMicroWorkbench_Complete()\n| extend Severity = case(severity_s == \"low\", \"Informational\",\n                        severity_s == \"medium\", \"Low\",\n                        severity_s == \"high\", \"Medium\",\n                        \"High\"\n                        )\n| extend \n    UserAccountName_s = todynamic(column_ifexists(\"UserAccountName_s\", \"[]\")),\n    UserAccountNTDomain_s = todynamic(column_ifexists(\"UserAccountNTDomain_s\", \"[]\")),\n    FileName_s = todynamic(column_ifexists(\"FileName_s\", \"[]\")),\n    FileDirectory_s = todynamic(column_ifexists(\"FileDirectory_s\", \"[]\")),\n    ProcessCommandLine_s = todynamic(column_ifexists(\"ProcessCommandLine_s\", \"[]\")),\n    RegistryKey_s = todynamic(column_ifexists(\"RegistryKey_s\", \"[]\")),\n    RegistryValue_s = todynamic(column_ifexists(\"RegistryValue_s\", \"[]\")),\n    RegistryValueName_s = todynamic(column_ifexists(\"RegistryValueName_s\", \"[]\"))",
+                "query": "TrendMicroWorkbench_Complete\n| extend Severity = case(severity_s == \"low\", \"Informational\",\n                        severity_s == \"medium\", \"Low\",\n                        severity_s == \"high\", \"Medium\",\n                        \"High\"\n                        )",
                 "queryFrequency": "PT5M",
                 "queryPeriod": "PT5M",
                 "severity": "High",
