@@ -91,7 +91,7 @@ Azure will automatically deploy:
 3. Data Collection Endpoint (DCE)
 4. Data Collection Rule (DCR) with data transformation
 5. Connector definition in Sentinel portal
-6. Parser function (Workbench only)
+6. Parser function (Workbench: `TrendMicroWorkbench_Complete`, OAT: `TrendMicroOAT_Complete`)
 7. Analytic rule template (disabled by default)
 8. Workbook dashboard for monitoring
 
@@ -175,7 +175,7 @@ mainTemplate.json (Orchestrator)
   ├─> dce.json                    # Data Collection Endpoint
   ├─> dcr.json                    # Data Collection Rule (transforms data)
   ├─> connector-definition.json   # Connector UI in portal
-  ├─> parser-function.json        # KQL parser (Workbench only)
+  ├─> parser-function.json        # KQL parser (Workbench + OAT; universal old+new)
   ├─> analytic-rule.json          # Incident creation rule (disabled)
   └─> workbook.json               # Monitoring dashboard
 ```
@@ -266,7 +266,7 @@ templates/
 ├── oat/                    # OAT connector (modular)
 │   ├── mainTemplate.json
 │   ├── createUiDefinition.json
-│   └── components/         # 5 modular components
+│   └── components/         # modular components (incl. parser-function.json)
 │
 ├── legacy/                 # Archived old templates
 └── ARCHITECTURE.md         # Detailed architecture documentation
@@ -325,9 +325,20 @@ az deployment group create \
 
 ## 📚 Documentation
 
-- [Architecture Details](templates/ARCHITECTURE.md) - Deep dive into component design
-- [Workbench Modular Summary](MODULAR_TEMPLATE_SUMMARY.md) - Workbench implementation details
-- [OAT Modular Summary](OAT_MODULAR_SUMMARY.md) - OAT implementation details
+New here? Start with the **[docs/](docs/)** folder — detailed, plain-language guides written for every experience level:
+
+- [Docs home](docs/README.md) — the map of all guides
+- [Concepts — how it all fits together](docs/01-concepts.md) — what this is and *why* it's built this way
+- [Permissions you need (and why)](docs/02-permissions.md) — every Azure & Trend Vision One permission, explained
+- [Deploying the connector](docs/03-deployment.md) — step-by-step, portal and CLI
+- [Using the connector day to day](docs/04-using-the-connector.md) — verify data, query, alerts, dashboards, filters
+- [Migrating from the old connector](docs/05-migration.md) — move off the old Azure Function connector safely
+- [Troubleshooting](docs/06-troubleshooting.md) — fix the common problems
+
+Deeper / maintainer references:
+
+- [Architecture Details](templates/ARCHITECTURE.md) — deep dive into component design
+- [Internal test-deploy notes](docs/internal/test-deploy.md) — 🔒 maintainers only, removed before going public
 
 ## 🤝 Support
 
