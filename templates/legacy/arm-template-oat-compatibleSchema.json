@@ -793,7 +793,7 @@
             "properties": {
                 "connectorUiConfig": {
                     "id": "[variables('connectorId')]",
-                    "title": "Trend Micro Vision One - OAT (Production Safe)",
+                    "title": "Trend Micro Vision One - OAT",
                     "publisher": "Trend Micro",
                     "descriptionMarkdown": "**V1-compatible** CCF connector for Observed Attack Techniques. Column names exactly match the legacy V1 Azure Function connector (detail_*_s prefix, endpoint_ips_s/endpoint_name_s/endpoint_guid_g object expansion, xdrCustomerId_g lowercase). Full payload also preserved as `RawData` for fallback parsing.",
                     "graphQueriesTableName": "TrendMicro_XDR_OAT_V2_CL",

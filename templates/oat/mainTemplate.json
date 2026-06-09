@@ -155,6 +155,25 @@
             }
         },
         {
+            "name": "parserFunction",
+            "type": "Microsoft.Resources/deployments",
+            "apiVersion": "2022-09-01",
+            "dependsOn": [
+                "[resourceId('Microsoft.Resources/deployments', 'customTable')]"
+            ],
+            "properties": {
+                "mode": "Incremental",
+                "templateLink": {
+                    "uri": "[concat(variables('baseUrl'), '/parser-function.json')]",
+                    "contentVersion": "1.0.0.0"
+                },
+                "parameters": {
+                    "workspace": {"value": "[parameters('workspace')]"},
+                    "workspace-location": {"value": "[parameters('workspace-location')]"}
+                }
+            }
+        },
+        {
             "name": "dataConnector",
             "type": "Microsoft.Resources/deployments",
             "apiVersion": "2022-09-01",
