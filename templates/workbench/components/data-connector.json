@@ -43,7 +43,7 @@
         "streamName": {
             "type": "string",
             "metadata": {
-                "description": "Stream name declared by the DCR (e.g. Custom-TrendMicro_XDR_WORKBENCH_CL)."
+                "description": "Stream name declared by the DCR (e.g. Custom-TrendMicro_XDR_WORKBENCH_V2_CL)."
             }
         }
     },
@@ -66,7 +66,7 @@
             "kind": "RestApiPoller",
             "properties": {
                 "connectorDefinitionName": "[variables('connectorId')]",
-                "dataType": "TrendMicro_XDR_WORKBENCH_CL",
+                "dataType": "TrendMicro_XDR_WORKBENCH_V2_CL",
                 "dcrConfig": {
                     "streamName": "[parameters('streamName')]",
                     "dataCollectionEndpoint": "[parameters('dceEndpoint')]",

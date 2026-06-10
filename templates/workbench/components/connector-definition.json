@@ -38,7 +38,7 @@
     },
     "variables": {
         "connectorId": "TrendMicro_XDR_Workbench",
-        "tableName": "TrendMicro_XDR_WORKBENCH_CL",
+        "tableName": "TrendMicro_XDR_WORKBENCH_V2_CL",
         "apiHostnames": {
             "UK": "api.uk.xdr.trendmicro.com",
             "US": "api.xdr.trendmicro.com",
@@ -147,7 +147,7 @@
                     ]
                 },
                 "dcrConfig": {
-                    "streamName": "Custom-TrendMicro_XDR_WORKBENCH_CL",
+                    "streamName": "Custom-TrendMicro_XDR_WORKBENCH_V2_CL",
                     "dataCollectionEndpoint": "[parameters('dceEndpoint')]",
                     "dataCollectionRuleImmutableId": "[parameters('dcrImmutableId')]"
                 },

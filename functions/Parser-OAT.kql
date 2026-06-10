@@ -3,175 +3,34 @@
 // ════════════════════════════════════════════════════════════════════════════════
 //
 // PURPOSE:
-//   Universal parser for TrendMicro_XDR_OAT_CL
-// ── Resolve the detail payload once: prefer a dynamic `detail` column (legacy newSchema),
-//    otherwise parse the `RawData` JSON string the connector preserves (old + new flat data).
-| extend _detailDyn = column_ifexists("detail", dynamic(null))
-| extend _detailStr = tostring(column_ifexists("detail_s", ""))
-| extend _rawData    = tostring(column_ifexists("RawData", ""))
-| extend _d = case(isnotnull(_detailDyn), _detailDyn, isnotempty(_detailStr), todynamic(_detailStr), isnotempty(_rawData), todynamic(_rawData), dynamic(null))
-// ── Resolve endpoint + filters objects for fallback (legacy data may carry them whole).
-| extend _ep = column_ifexists("endpoint", dynamic(null))
-| extend _filters = iff(isnotnull(column_ifexists("filters", dynamic(null))), column_ifexists("filters", dynamic(null)), todynamic(tostring(column_ifexists("filters_s", ""))))
-| project
-    TimeGenerated = todatetime(column_ifexists("TimeGenerated", datetime(null))),
-    SourceSystem = tostring(column_ifexists("SourceSystem", "")),
-    Computer = tostring(column_ifexists("Computer", "")),
-    RawData = _rawData,
-    detectionTime_t = todatetime(column_ifexists("detectionTime_t", datetime(null))),
-    entityType_s = tostring(column_ifexists("entityType_s", "")),
-    entityName_s = tostring(column_ifexists("entityName_s", "")),
-    filters_s = tostring(column_ifexists("filters_s", "")),
-    endpoint_ips_s = iff(isnotempty(tostring(column_ifexists("endpoint_ips_s", ""))), tostring(column_ifexists("endpoint_ips_s", "")), tostring(_ep.ips)),
-    endpoint_name_s = iff(isnotempty(tostring(column_ifexists("endpoint_name_s", ""))), tostring(column_ifexists("endpoint_name_s", "")), tostring(_ep.endpointName)),
-    endpoint_guid_g = iff(isnotempty(tostring(column_ifexists("endpoint_guid_g", ""))), tostring(column_ifexists("endpoint_guid_g", "")), tostring(_ep.agentGuid)),
-    xdrCustomerId_g = tostring(column_ifexists("xdrCustomerId_g", "")),
-    detail_endpointGuid_g = iff(isnotempty(tostring(column_ifexists("detail_endpointGuid_g", ""))), tostring(column_ifexists("detail_endpointGuid_g", "")), tostring(_d.endpointGuid)),
-    detail_eventId_s = iff(isnotempty(tostring(column_ifexists("detail_eventId_s", ""))), tostring(column_ifexists("detail_eventId_s", "")), tostring(_d.eventId)),
-    detail_eventSubId_s = iff(isnotempty(tostring(column_ifexists("detail_eventSubId_s", ""))), tostring(column_ifexists("detail_eventSubId_s", "")), tostring(_d.eventSubId)),
-    detail_firstSeen_t = iff(isnotnull(todatetime(column_ifexists("detail_firstSeen_t", datetime(null)))), todatetime(column_ifexists("detail_firstSeen_t", datetime(null))), todatetime(datetime(1970-01-01) + tolong(_d.firstSeen) * 1ms)),
-    detail_lastSeen_t = iff(isnotnull(todatetime(column_ifexists("detail_lastSeen_t", datetime(null)))), todatetime(column_ifexists("detail_lastSeen_t", datetime(null))), todatetime(datetime(1970-01-01) + tolong(_d.lastSeen) * 1ms)),
-    detail_logonUser_s = iff(isnotempty(tostring(column_ifexists("detail_logonUser_s", ""))), tostring(column_ifexists("detail_logonUser_s", "")), tostring(_d.logonUser)),
-    detail_objectCmd_s = iff(isnotempty(tostring(column_ifexists("detail_objectCmd_s", ""))), tostring(column_ifexists("detail_objectCmd_s", "")), tostring(_d.objectCmd)),
-    detail_objectFileCreation_d = iff(isnotnull(toreal(column_ifexists("detail_objectFileCreation_d", real(null)))), toreal(column_ifexists("detail_objectFileCreation_d", real(null))), toreal(_d.objectFileCreation)),
-    detail_objectFileHashSha256_s = iff(isnotempty(tostring(column_ifexists("detail_objectFileHashSha256_s", ""))), tostring(column_ifexists("detail_objectFileHashSha256_s", "")), tostring(_d.objectFileHashSha256)),
-    detail_objectFileModifiedTime_d = iff(isnotnull(toreal(column_ifexists("detail_objectFileModifiedTime_d", real(null)))), toreal(column_ifexists("detail_objectFileModifiedTime_d", real(null))), toreal(_d.objectFileModifiedTime)),
-    detail_objectFileSize_d = iff(isnotnull(toreal(column_ifexists("detail_objectFileSize_d", real(null)))), toreal(column_ifexists("detail_objectFileSize_d", real(null))), toreal(_d.objectFileSize)),
-    detail_objectLaunchTime_d = iff(isnotnull(toreal(column_ifexists("detail_objectLaunchTime_d", real(null)))), toreal(column_ifexists("detail_objectLaunchTime_d", real(null))), toreal(_d.objectLaunchTime)),
-    detail_objectName_s = iff(isnotempty(tostring(column_ifexists("detail_objectName_s", ""))), tostring(column_ifexists("detail_objectName_s", "")), tostring(_d.objectName)),
-    detail_objectRunAsLocalAccount_b = iff(isnotnull(tobool(column_ifexists("detail_objectRunAsLocalAccount_b", bool(null)))), tobool(column_ifexists("detail_objectRunAsLocalAccount_b", bool(null))), tobool(_d.objectRunAsLocalAccount)),
-    detail_objectSigner_s = iff(isnotempty(tostring(column_ifexists("detail_objectSigner_s", ""))), tostring(column_ifexists("detail_objectSigner_s", "")), tostring(_d.objectSigner)),
-    detail_objectSignerValid_s = iff(isnotempty(tostring(column_ifexists("detail_objectSignerValid_s", ""))), tostring(column_ifexists("detail_objectSignerValid_s", "")), tostring(_d.objectSignerValid)),
-    detail_objectTrueType_d = iff(isnotnull(toreal(column_ifexists("detail_objectTrueType_d", real(null)))), toreal(column_ifexists("detail_objectTrueType_d", real(null))), toreal(_d.objectTrueType)),
-    detail_objectUser_s = iff(isnotempty(tostring(column_ifexists("detail_objectUser_s", ""))), tostring(column_ifexists("detail_objectUser_s", "")), tostring(_d.objectUser)),
-    detail_objectUserDomain_s = iff(isnotempty(tostring(column_ifexists("detail_objectUserDomain_s", ""))), tostring(column_ifexists("detail_objectUserDomain_s", "")), tostring(_d.objectUserDomain)),
-    detail_osName_s = iff(isnotempty(tostring(column_ifexists("detail_osName_s", ""))), tostring(column_ifexists("detail_osName_s", "")), tostring(_d.osName)),
-    detail_osType_s = iff(isnotempty(tostring(column_ifexists("detail_osType_s", ""))), tostring(column_ifexists("detail_osType_s", "")), tostring(_d.osType)),
-    detail_osVer_s = iff(isnotempty(tostring(column_ifexists("detail_osVer_s", ""))), tostring(column_ifexists("detail_osVer_s", "")), tostring(_d.osVer)),
-    detail_parentCmd_s = iff(isnotempty(tostring(column_ifexists("detail_parentCmd_s", ""))), tostring(column_ifexists("detail_parentCmd_s", "")), tostring(_d.parentCmd)),
-    detail_parentFileCreation_d = iff(isnotnull(toreal(column_ifexists("detail_parentFileCreation_d", real(null)))), toreal(column_ifexists("detail_parentFileCreation_d", real(null))), toreal(_d.parentFileCreation)),
-    detail_parentFileHashSha1_s = iff(isnotempty(tostring(column_ifexists("detail_parentFileHashSha1_s", ""))), tostring(column_ifexists("detail_parentFileHashSha1_s", "")), tostring(_d.parentFileHashSha1)),
-    detail_parentFileHashSha256_s = iff(isnotempty(tostring(column_ifexists("detail_parentFileHashSha256_s", ""))), tostring(column_ifexists("detail_parentFileHashSha256_s", "")), tostring(_d.parentFileHashSha256)),
-    detail_parentFileModifiedTime_d = iff(isnotnull(toreal(column_ifexists("detail_parentFileModifiedTime_d", real(null)))), toreal(column_ifexists("detail_parentFileModifiedTime_d", real(null))), toreal(_d.parentFileModifiedTime)),
-    detail_parentFilePath_s = iff(isnotempty(tostring(column_ifexists("detail_parentFilePath_s", ""))), tostring(column_ifexists("detail_parentFilePath_s", "")), tostring(_d.parentFilePath)),
-    detail_parentFileSize_d = iff(isnotnull(toreal(column_ifexists("detail_parentFileSize_d", real(null)))), toreal(column_ifexists("detail_parentFileSize_d", real(null))), toreal(_d.parentFileSize)),
-    detail_parentLaunchTime_d = iff(isnotnull(toreal(column_ifexists("detail_parentLaunchTime_d", real(null)))), toreal(column_ifexists("detail_parentLaunchTime_d", real(null))), toreal(_d.parentLaunchTime)),
-    detail_parentName_s = iff(isnotempty(tostring(column_ifexists("detail_parentName_s", ""))), tostring(column_ifexists("detail_parentName_s", "")), tostring(_d.parentName)),
-    detail_parentTrueType_d = iff(isnotnull(toreal(column_ifexists("detail_parentTrueType_d", real(null)))), toreal(column_ifexists("detail_parentTrueType_d", real(null))), toreal(_d.parentTrueType)),
-    detail_parentUser_s = iff(isnotempty(tostring(column_ifexists("detail_parentUser_s", ""))), tostring(column_ifexists("detail_parentUser_s", "")), tostring(_d.parentUser)),
-    detail_parentUserDomain_s = iff(isnotempty(tostring(column_ifexists("detail_parentUserDomain_s", ""))), tostring(column_ifexists("detail_parentUserDomain_s", "")), tostring(_d.parentUserDomain)),
-    detail_plang_d = iff(isnotnull(toreal(column_ifexists("detail_plang_d", real(null)))), toreal(column_ifexists("detail_plang_d", real(null))), toreal(_d.plang)),
-    detail_processCmd_s = iff(isnotempty(tostring(column_ifexists("detail_processCmd_s", ""))), tostring(column_ifexists("detail_processCmd_s", "")), tostring(_d.processCmd)),
-    detail_processFileCreation_d = iff(isnotnull(toreal(column_ifexists("detail_processFileCreation_d", real(null)))), toreal(column_ifexists("detail_processFileCreation_d", real(null))), toreal(_d.processFileCreation)),
-    detail_processFileHashSha1_s = iff(isnotempty(tostring(column_ifexists("detail_processFileHashSha1_s", ""))), tostring(column_ifexists("detail_processFileHashSha1_s", "")), tostring(_d.processFileHashSha1)),
-    detail_processFileHashSha256_s = iff(isnotempty(tostring(column_ifexists("detail_processFileHashSha256_s", ""))), tostring(column_ifexists("detail_processFileHashSha256_s", "")), tostring(_d.processFileHashSha256)),
-    detail_processFileModifiedTime_d = iff(isnotnull(toreal(column_ifexists("detail_processFileModifiedTime_d", real(null)))), toreal(column_ifexists("detail_processFileModifiedTime_d", real(null))), toreal(_d.processFileModifiedTime)),
-    detail_processFilePath_s = iff(isnotempty(tostring(column_ifexists("detail_processFilePath_s", ""))), tostring(column_ifexists("detail_processFilePath_s", "")), tostring(_d.processFilePath)),
-    detail_processFileSize_d = iff(isnotnull(toreal(column_ifexists("detail_processFileSize_d", real(null)))), toreal(column_ifexists("detail_processFileSize_d", real(null))), toreal(_d.processFileSize)),
-    detail_processLaunchTime_d = iff(isnotnull(toreal(column_ifexists("detail_processLaunchTime_d", real(null)))), toreal(column_ifexists("detail_processLaunchTime_d", real(null))), toreal(_d.processLaunchTime)),
-    detail_processPid_d = iff(isnotnull(toreal(column_ifexists("detail_processPid_d", real(null)))), toreal(column_ifexists("detail_processPid_d", real(null))), toreal(_d.processPid)),
-    detail_processSigner_s = iff(isnotempty(tostring(column_ifexists("detail_processSigner_s", ""))), tostring(column_ifexists("detail_processSigner_s", "")), tostring(_d.processSigner)),
-    detail_processSignerValid_s = iff(isnotempty(tostring(column_ifexists("detail_processSignerValid_s", ""))), tostring(column_ifexists("detail_processSignerValid_s", "")), tostring(_d.processSignerValid)),
-    detail_processTrueType_d = iff(isnotnull(toreal(column_ifexists("detail_processTrueType_d", real(null)))), toreal(column_ifexists("detail_processTrueType_d", real(null))), toreal(_d.processTrueType)),
-    detail_processUser_s = iff(isnotempty(tostring(column_ifexists("detail_processUser_s", ""))), tostring(column_ifexists("detail_processUser_s", "")), tostring(_d.processUser)),
-    detail_processUserDomain_s = iff(isnotempty(tostring(column_ifexists("detail_processUserDomain_s", ""))), tostring(column_ifexists("detail_processUserDomain_s", "")), tostring(_d.processUserDomain)),
-    detail_timezone_s = iff(isnotempty(tostring(column_ifexists("detail_timezone_s", ""))), tostring(column_ifexists("detail_timezone_s", "")), tostring(_d.timezone)),
-    detail_userDomain_s = iff(isnotempty(tostring(column_ifexists("detail_userDomain_s", ""))), tostring(column_ifexists("detail_userDomain_s", "")), tostring(_d.userDomain)),
-    detail_objectAppName_s = iff(isnotempty(tostring(column_ifexists("detail_objectAppName_s", ""))), tostring(column_ifexists("detail_objectAppName_s", "")), tostring(_d.objectAppName)),
-    detail_objectContentName_s = iff(isnotempty(tostring(column_ifexists("detail_objectContentName_s", ""))), tostring(column_ifexists("detail_objectContentName_s", "")), tostring(_d.objectContentName)),
-    detail_objectFirstSeen_d = iff(isnotnull(toreal(column_ifexists("detail_objectFirstSeen_d", real(null)))), toreal(column_ifexists("detail_objectFirstSeen_d", real(null))), toreal(_d.objectFirstSeen)),
-    detail_objectLastSeen_d = iff(isnotnull(toreal(column_ifexists("detail_objectLastSeen_d", real(null)))), toreal(column_ifexists("detail_objectLastSeen_d", real(null))), toreal(_d.objectLastSeen)),
-    detail_objectRawDataStr_s = iff(isnotempty(tostring(column_ifexists("detail_objectRawDataStr_s", ""))), tostring(column_ifexists("detail_objectRawDataStr_s", "")), tostring(_d.objectRawDataStr)),
-    detail_parentSigner_s = iff(isnotempty(tostring(column_ifexists("detail_parentSigner_s", ""))), tostring(column_ifexists("detail_parentSigner_s", "")), tostring(_d.parentSigner)),
-    detail_parentSignerValid_s = iff(isnotempty(tostring(column_ifexists("detail_parentSignerValid_s", ""))), tostring(column_ifexists("detail_parentSignerValid_s", "")), tostring(_d.parentSignerValid)),
-    detail_objectSubTrueType_d = iff(isnotnull(toreal(column_ifexists("detail_objectSubTrueType_d", real(null)))), toreal(column_ifexists("detail_objectSubTrueType_d", real(null))), toreal(_d.objectSubTrueType)),
-    detail_hostName_s = iff(isnotempty(tostring(column_ifexists("detail_hostName_s", ""))), tostring(column_ifexists("detail_hostName_s", "")), tostring(_d.hostName)),
-    detail_objectIps_s = iff(isnotempty(tostring(column_ifexists("detail_objectIps_s", ""))), tostring(column_ifexists("detail_objectIps_s", "")), tostring(_d.objectIps)),
-    detail_srcFirstSeen_d = iff(isnotnull(toreal(column_ifexists("detail_srcFirstSeen_d", real(null)))), toreal(column_ifexists("detail_srcFirstSeen_d", real(null))), toreal(_d.srcFirstSeen)),
-    detail_srcLastSeen_d = iff(isnotnull(toreal(column_ifexists("detail_srcLastSeen_d", real(null)))), toreal(column_ifexists("detail_srcLastSeen_d", real(null))), toreal(_d.srcLastSeen)),
-    detail_actResult_s = iff(isnotempty(tostring(column_ifexists("detail_actResult_s", ""))), tostring(column_ifexists("detail_actResult_s", "")), tostring(_d.actResult)),
-    detail_channel_s = iff(isnotempty(tostring(column_ifexists("detail_channel_s", ""))), tostring(column_ifexists("detail_channel_s", "")), tostring(_d.channel)),
-    detail_domainName_s = iff(isnotempty(tostring(column_ifexists("detail_domainName_s", ""))), tostring(column_ifexists("detail_domainName_s", "")), tostring(_d.domainName)),
-    detail_endpointMacAddress_s = iff(isnotempty(tostring(column_ifexists("detail_endpointMacAddress_s", ""))), tostring(column_ifexists("detail_endpointMacAddress_s", "")), tostring(_d.endpointMacAddress)),
-    detail_eventSubName_s = iff(isnotempty(tostring(column_ifexists("detail_eventSubName_s", ""))), tostring(column_ifexists("detail_eventSubName_s", "")), tostring(_d.eventSubName)),
-    detail_firstAct_s = iff(isnotempty(tostring(column_ifexists("detail_firstAct_s", ""))), tostring(column_ifexists("detail_firstAct_s", "")), tostring(_d.firstAct)),
-    detail_firstActResult_s = iff(isnotempty(tostring(column_ifexists("detail_firstActResult_s", ""))), tostring(column_ifexists("detail_firstActResult_s", "")), tostring(_d.firstActResult)),
-    detail_mDevice_s = iff(isnotempty(tostring(column_ifexists("detail_mDevice_s", ""))), tostring(column_ifexists("detail_mDevice_s", "")), tostring(_d.mDevice)),
-    detail_malDst_s = iff(isnotempty(tostring(column_ifexists("detail_malDst_s", ""))), tostring(column_ifexists("detail_malDst_s", "")), tostring(_d.malDst)),
-    detail_malName_s = iff(isnotempty(tostring(column_ifexists("detail_malName_s", ""))), tostring(column_ifexists("detail_malName_s", "")), tostring(_d.malName)),
-    detail_malSubType_s = iff(isnotempty(tostring(column_ifexists("detail_malSubType_s", ""))), tostring(column_ifexists("detail_malSubType_s", "")), tostring(_d.malSubType)),
-    detail_objectFileHashSha1_s = iff(isnotempty(tostring(column_ifexists("detail_objectFileHashSha1_s", ""))), tostring(column_ifexists("detail_objectFileHashSha1_s", "")), tostring(_d.objectFileHashSha1)),
-    detail_objectFileName_s = iff(isnotempty(tostring(column_ifexists("detail_objectFileName_s", ""))), tostring(column_ifexists("detail_objectFileName_s", "")), tostring(_d.objectFileName)),
-    detail_objectFilePath_s = iff(isnotempty(tostring(column_ifexists("detail_objectFilePath_s", ""))), tostring(column_ifexists("detail_objectFilePath_s", "")), tostring(_d.objectFilePath)),
-    detail_objectType_s = iff(isnotempty(tostring(column_ifexists("detail_objectType_s", ""))), tostring(column_ifexists("detail_objectType_s", "")), tostring(_d.objectType)),
-    detail_scanType_s = iff(isnotempty(tostring(column_ifexists("detail_scanType_s", ""))), tostring(column_ifexists("detail_scanType_s", "")), tostring(_d.scanType)),
-    detail_secondAct_s = iff(isnotempty(tostring(column_ifexists("detail_secondAct_s", ""))), tostring(column_ifexists("detail_secondAct_s", "")), tostring(_d.secondAct)),
-    detail_secondActResult_s = iff(isnotempty(tostring(column_ifexists("detail_secondActResult_s", ""))), tostring(column_ifexists("detail_secondActResult_s", "")), tostring(_d.secondActResult)),
-    detail_act_s = iff(isnotempty(tostring(column_ifexists("detail_act_s", ""))), tostring(column_ifexists("detail_act_s", "")), tostring(_d.act)),
-    detail_aggregatedCount_d = iff(isnotnull(toreal(column_ifexists("detail_aggregatedCount_d", real(null)))), toreal(column_ifexists("detail_aggregatedCount_d", real(null))), toreal(_d.aggregatedCount)),
-    detail_app_s = iff(isnotempty(tostring(column_ifexists("detail_app_s", ""))), tostring(column_ifexists("detail_app_s", "")), tostring(_d.app)),
-    detail_appGroup_s = iff(isnotempty(tostring(column_ifexists("detail_appGroup_s", ""))), tostring(column_ifexists("detail_appGroup_s", "")), tostring(_d.appGroup)),
-    detail_aptRelated_s = iff(isnotempty(tostring(column_ifexists("detail_aptRelated_s", ""))), tostring(column_ifexists("detail_aptRelated_s", "")), tostring(_d.aptRelated)),
-    detail_clientFlag_s = iff(isnotempty(tostring(column_ifexists("detail_clientFlag_s", ""))), tostring(column_ifexists("detail_clientFlag_s", "")), tostring(_d.clientFlag)),
-    detail_detectionType_s = iff(isnotempty(tostring(column_ifexists("detail_detectionType_s", ""))), tostring(column_ifexists("detail_detectionType_s", "")), tostring(_d.detectionType)),
-    detail_deviceDirection_s = iff(isnotempty(tostring(column_ifexists("detail_deviceDirection_s", ""))), tostring(column_ifexists("detail_deviceDirection_s", "")), tostring(_d.deviceDirection)),
-    detail_deviceGUID_g = iff(isnotempty(tostring(column_ifexists("detail_deviceGUID_g", ""))), tostring(column_ifexists("detail_deviceGUID_g", "")), tostring(_d.deviceGUID)),
-    detail_deviceMacAddress_s = iff(isnotempty(tostring(column_ifexists("detail_deviceMacAddress_s", ""))), tostring(column_ifexists("detail_deviceMacAddress_s", "")), tostring(_d.deviceMacAddress)),
-    detail_dhost_s = iff(isnotempty(tostring(column_ifexists("detail_dhost_s", ""))), tostring(column_ifexists("detail_dhost_s", "")), tostring(_d.dhost)),
-    detail_dmac_s = iff(isnotempty(tostring(column_ifexists("detail_dmac_s", ""))), tostring(column_ifexists("detail_dmac_s", "")), tostring(_d.dmac)),
-    detail_dpt_d = iff(isnotnull(toreal(column_ifexists("detail_dpt_d", real(null)))), toreal(column_ifexists("detail_dpt_d", real(null))), toreal(_d.dpt)),
-    detail_dst_s = iff(isnotempty(tostring(column_ifexists("detail_dst_s", ""))), tostring(column_ifexists("detail_dst_s", "")), tostring(_d.dst)),
-    detail_dstGroup_s = iff(isnotempty(tostring(column_ifexists("detail_dstGroup_s", ""))), tostring(column_ifexists("detail_dstGroup_s", "")), tostring(_d.dstGroup)),
-    detail_dstZone_s = iff(isnotempty(tostring(column_ifexists("detail_dstZone_s", ""))), tostring(column_ifexists("detail_dstZone_s", "")), tostring(_d.dstZone)),
-    detail_dvchost_s = iff(isnotempty(tostring(column_ifexists("detail_dvchost_s", ""))), tostring(column_ifexists("detail_dvchost_s", "")), tostring(_d.dvchost)),
-    detail_eventId_d = iff(isnotnull(toreal(column_ifexists("detail_eventId_d", real(null)))), toreal(column_ifexists("detail_eventId_d", real(null))), toreal(_d.eventId)),
-    detail_eventName_s = iff(isnotempty(tostring(column_ifexists("detail_eventName_s", ""))), tostring(column_ifexists("detail_eventName_s", "")), tostring(_d.eventName)),
-    detail_eventSourceType_s = iff(isnotempty(tostring(column_ifexists("detail_eventSourceType_s", ""))), tostring(column_ifexists("detail_eventSourceType_s", "")), tostring(_d.eventSourceType)),
-    detail_eventTime_d = iff(isnotnull(toreal(column_ifexists("detail_eventTime_d", real(null)))), toreal(column_ifexists("detail_eventTime_d", real(null))), toreal(_d.eventTime)),
-    detail_fileExt_s = iff(isnotempty(tostring(column_ifexists("detail_fileExt_s", ""))), tostring(column_ifexists("detail_fileExt_s", "")), tostring(_d.fileExt)),
-    detail_fileHash_s = iff(isnotempty(tostring(column_ifexists("detail_fileHash_s", ""))), tostring(column_ifexists("detail_fileHash_s", "")), tostring(_d.fileHash)),
-    detail_fileName_s = iff(isnotempty(tostring(column_ifexists("detail_fileName_s", ""))), tostring(column_ifexists("detail_fileName_s", "")), tostring(_d.fileName)),
-    detail_filePath_s = iff(isnotempty(tostring(column_ifexists("detail_filePath_s", ""))), tostring(column_ifexists("detail_filePath_s", "")), tostring(_d.filePath)),
-    detail_filePathName_s = iff(isnotempty(tostring(column_ifexists("detail_filePathName_s", ""))), tostring(column_ifexists("detail_filePathName_s", "")), tostring(_d.filePathName)),
-    detail_fileSize_d = iff(isnotnull(toreal(column_ifexists("detail_fileSize_d", real(null)))), toreal(column_ifexists("detail_fileSize_d", real(null))), toreal(_d.fileSize)),
-    detail_filterRiskLevel_s = iff(isnotempty(tostring(column_ifexists("detail_filterRiskLevel_s", ""))), tostring(column_ifexists("detail_filterRiskLevel_s", "")), tostring(_d.filterRiskLevel)),
-    detail_fullPath_s = iff(isnotempty(tostring(column_ifexists("detail_fullPath_s", ""))), tostring(column_ifexists("detail_fullPath_s", "")), tostring(_d.fullPath)),
-    detail_hostSeverity_d = iff(isnotnull(toreal(column_ifexists("detail_hostSeverity_d", real(null)))), toreal(column_ifexists("detail_hostSeverity_d", real(null))), toreal(_d.hostSeverity)),
-    detail_interestedGroup_s = iff(isnotempty(tostring(column_ifexists("detail_interestedGroup_s", ""))), tostring(column_ifexists("detail_interestedGroup_s", "")), tostring(_d.interestedGroup)),
-    detail_interestedHost_s = iff(isnotempty(tostring(column_ifexists("detail_interestedHost_s", ""))), tostring(column_ifexists("detail_interestedHost_s", "")), tostring(_d.interestedHost)),
-    detail_interestedIp_s = iff(isnotempty(tostring(column_ifexists("detail_interestedIp_s", ""))), tostring(column_ifexists("detail_interestedIp_s", "")), tostring(_d.interestedIp)),
-    detail_malType_s = iff(isnotempty(tostring(column_ifexists("detail_malType_s", ""))), tostring(column_ifexists("detail_malType_s", "")), tostring(_d.malType)),
-    detail_malTypeGroup_s = iff(isnotempty(tostring(column_ifexists("detail_malTypeGroup_s", ""))), tostring(column_ifexists("detail_malTypeGroup_s", "")), tostring(_d.malTypeGroup)),
-    detail_pAttackPhase_s = iff(isnotempty(tostring(column_ifexists("detail_pAttackPhase_s", ""))), tostring(column_ifexists("detail_pAttackPhase_s", "")), tostring(_d.pAttackPhase)),
-    detail_pComp_s = iff(isnotempty(tostring(column_ifexists("detail_pComp_s", ""))), tostring(column_ifexists("detail_pComp_s", "")), tostring(_d.pComp)),
-    detail_peerGroup_s = iff(isnotempty(tostring(column_ifexists("detail_peerGroup_s", ""))), tostring(column_ifexists("detail_peerGroup_s", "")), tostring(_d.peerGroup)),
-    detail_peerHost_s = iff(isnotempty(tostring(column_ifexists("detail_peerHost_s", ""))), tostring(column_ifexists("detail_peerHost_s", "")), tostring(_d.peerHost)),
-    detail_peerIp_s = iff(isnotempty(tostring(column_ifexists("detail_peerIp_s", ""))), tostring(column_ifexists("detail_peerIp_s", "")), tostring(_d.peerIp)),
-    detail_pname_s = iff(isnotempty(tostring(column_ifexists("detail_pname_s", ""))), tostring(column_ifexists("detail_pname_s", "")), tostring(_d.pname)),
-    detail_remarks_s = iff(isnotempty(tostring(column_ifexists("detail_remarks_s", ""))), tostring(column_ifexists("detail_remarks_s", "")), tostring(_d.remarks)),
-    detail_rt_t = iff(isnotnull(todatetime(column_ifexists("detail_rt_t", datetime(null)))), todatetime(column_ifexists("detail_rt_t", datetime(null))), todatetime(datetime(1970-01-01) + tolong(_d.rt) * 1ms)),
-    detail_rtHour_d = iff(isnotnull(toreal(column_ifexists("detail_rtHour_d", real(null)))), toreal(column_ifexists("detail_rtHour_d", real(null))), toreal(_d.rtHour)),
-    detail_ruleId_d = iff(isnotnull(toreal(column_ifexists("detail_ruleId_d", real(null)))), toreal(column_ifexists("detail_ruleId_d", real(null))), toreal(_d.ruleId)),
-    detail_ruleName_s = iff(isnotempty(tostring(column_ifexists("detail_ruleName_s", ""))), tostring(column_ifexists("detail_ruleName_s", "")), tostring(_d.ruleName)),
-    detail_senderIp_s = iff(isnotempty(tostring(column_ifexists("detail_senderIp_s", ""))), tostring(column_ifexists("detail_senderIp_s", "")), tostring(_d.senderIp)),
-    detail_severity_d = iff(isnotnull(toreal(column_ifexists("detail_severity_d", real(null)))), toreal(column_ifexists("detail_severity_d", real(null))), toreal(_d.severity)),
-    detail_shost_s = iff(isnotempty(tostring(column_ifexists("detail_shost_s", ""))), tostring(column_ifexists("detail_shost_s", "")), tostring(_d.shost)),
-    detail_smac_s = iff(isnotempty(tostring(column_ifexists("detail_smac_s", ""))), tostring(column_ifexists("detail_smac_s", "")), tostring(_d.smac)),
-    detail_spt_d = iff(isnotnull(toreal(column_ifexists("detail_spt_d", real(null)))), toreal(column_ifexists("detail_spt_d", real(null))), toreal(_d.spt)),
-    detail_src_s = iff(isnotempty(tostring(column_ifexists("detail_src_s", ""))), tostring(column_ifexists("detail_src_s", "")), tostring(_d.src)),
-    detail_srcGroup_s = iff(isnotempty(tostring(column_ifexists("detail_srcGroup_s", ""))), tostring(column_ifexists("detail_srcGroup_s", "")), tostring(_d.srcGroup)),
-    detail_srcZone_s = iff(isnotempty(tostring(column_ifexists("detail_srcZone_s", ""))), tostring(column_ifexists("detail_srcZone_s", "")), tostring(_d.srcZone)),
-    detail_tags_s = iff(isnotempty(tostring(column_ifexists("detail_tags_s", ""))), tostring(column_ifexists("detail_tags_s", "")), tostring(_d.tags)),
-    detail_threatType_s = iff(isnotempty(tostring(column_ifexists("detail_threatType_s", ""))), tostring(column_ifexists("detail_threatType_s", "")), tostring(_d.threatType)),
-    detail_uuid_g = iff(isnotempty(tostring(column_ifexists("detail_uuid_g", ""))), tostring(column_ifexists("detail_uuid_g", "")), tostring(_d.uuid)),
-    detail_cat_d = iff(isnotnull(toreal(column_ifexists("detail_cat_d", real(null)))), toreal(column_ifexists("detail_cat_d", real(null))), toreal(_d.cat)),
-    detail_endpointGUID_g = iff(isnotempty(tostring(column_ifexists("detail_endpointGUID_g", ""))), tostring(column_ifexists("detail_endpointGUID_g", "")), tostring(_d.endpointGUID)),
-    detail_endpointHostName_s = iff(isnotempty(tostring(column_ifexists("detail_endpointHostName_s", ""))), tostring(column_ifexists("detail_endpointHostName_s", "")), tostring(_d.endpointHostName)),
-    detail_endpointIp_s = iff(isnotempty(tostring(column_ifexists("detail_endpointIp_s", ""))), tostring(column_ifexists("detail_endpointIp_s", "")), tostring(_d.endpointIp)),
-    detail_processName_s = iff(isnotempty(tostring(column_ifexists("detail_processName_s", ""))), tostring(column_ifexists("detail_processName_s", "")), tostring(_d.processName)),
-    detail_proto_s = iff(isnotempty(tostring(column_ifexists("detail_proto_s", ""))), tostring(column_ifexists("detail_proto_s", "")), tostring(_d.proto)),
-    mitreTacticIds_s    = tostring(_filters[0].mitreTacticIds),
-    mitreTechniqueIds_s = tostring(_filters[0].mitreTechniqueIds),
-    Type = column_ifexists("Type", ""),
-    TenantId = column_ifexists("TenantId", ""),
-    _ResourceId = tostring(column_ifexists("_ResourceId",""))
+//   Universal parser that combines:
+//   - OLD data: TrendMicro_XDR_OAT_CL (legacy Azure Function connector) - AS-IS
+//   - NEW data: TrendMicro_XDR_OAT_V2_CL (CCF connector) - AS-IS (schema matches legacy)
+//
+// DEPLOYMENT:
+//   Create function named: TrendMicroOAT_Complete
+//
+// USAGE:
+//   TrendMicroOAT_Complete()
+//   | where detail_filterRiskLevel_s == "high"
+//   | project TimeGenerated, detail_endpointHostName_s, detail_objectCmd_s, detail_filterRiskLevel_s
+//
+// NOTE:
+//   Both tables have identical schemas, so we just union them.
+//   The source_table column is added to identify which table the data came from.
+//
+// ════════════════════════════════════════════════════════════════════════════════
+
+union isfuzzy=true
+    // ═══════════════════════════════════════════════════════════════════════════
+    // LEGACY DATA (Azure Function): Use AS-IS (already in correct format)
+    // ═══════════════════════════════════════════════════════════════════════════
+    (TrendMicro_XDR_OAT_CL
+     | extend source_table = "legacy"
+    ),
+    // ═══════════════════════════════════════════════════════════════════════════
+    // V2 DATA (CCF Connector): Use AS-IS (schema should match legacy)
+    // ═══════════════════════════════════════════════════════════════════════════
+    (TrendMicro_XDR_OAT_V2_CL
+     | extend source_table = "ccf"
+    )
