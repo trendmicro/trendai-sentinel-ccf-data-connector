@@ -6,6 +6,42 @@
 
 **OAT (Observed Attack Techniques)** &nbsp; [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ftrendmicro%2Ftrendai-sentinel-ccf-data-connector%2Fmain%2Ftemplates%2Foat%2FmainTemplate.json/createUIDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2Ftrendmicro%2Ftrendai-sentinel-ccf-data-connector%2Fmain%2Ftemplates%2Foat%2FcreateUiDefinition.json) [![Deploy to Azure US Gov](https://aka.ms/deploytoazuregovbutton)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ftrendmicro%2Ftrendai-sentinel-ccf-data-connector%2Fmain%2Ftemplates%2Foat%2FmainTemplate.json/createUIDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2Ftrendmicro%2Ftrendai-sentinel-ccf-data-connector%2Fmain%2Ftemplates%2Foat%2FcreateUiDefinition.json)
 
+### Test Deploy (Azure Storage-hosted, while repo is private)
+
+Templates served from a public Azure Blob container so the portal can fetch them without GitHub auth. Remove once the repo goes public.
+
+**Before clicking the buttons below, publish the latest templates to the blob container** so the deploy URLs serve current code.
+
+**One-time setup** (per developer):
+
+```bash
+# 1. Install Azure CLI if you don't have it
+#    macOS:  brew install azure-cli
+#    Linux:  https://learn.microsoft.com/cli/azure/install-azure-cli-linux
+
+# 2. Log in and select the subscription that owns the trendaiccf45 storage account
+az login
+az account set --subscription "<subscription-name-or-id>"
+```
+
+Required access: at least **Contributor** (or **Storage Account Key Operator Service Role**) on the `trendaiccf45` storage account, so `az storage account keys list` works. If you only have data-plane access, use a SAS token instead — see [scripts/publish-templates.sh](scripts/publish-templates.sh).
+
+**Each time you change templates**, publish them:
+
+```bash
+export AZURE_STORAGE_KEY="$(az storage account keys list \
+  --account-name trendaiccf45 \
+  --query '[0].value' -o tsv)"
+
+./scripts/publish-templates.sh
+```
+
+The script stages `templates/`, rewrites the nested `baseUrl` from the GitHub raw URL to the blob URL, and uploads to `trendaiccf45/arm-templates/`.
+
+**Workbench Alerts** &nbsp; [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Ftrendaiccf45.blob.core.windows.net%2Farm-templates%2Fworkbench%2FmainTemplate.json/createUIDefinitionUri/https%3A%2F%2Ftrendaiccf45.blob.core.windows.net%2Farm-templates%2Fworkbench%2FcreateUiDefinition.json)
+
+**OAT (Observed Attack Techniques)** &nbsp; [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Ftrendaiccf45.blob.core.windows.net%2Farm-templates%2Foat%2FmainTemplate.json/createUIDefinitionUri/https%3A%2F%2Ftrendaiccf45.blob.core.windows.net%2Farm-templates%2Foat%2FcreateUiDefinition.json)
+
 Production-ready data connectors for ingesting **Trend Vision One** security data into **Microsoft Sentinel** using Azure's Codeless Connector Platform (CCP).
 
 ## 🚀 Quick Deploy
@@ -55,7 +91,7 @@ Azure will automatically deploy:
 3. Data Collection Endpoint (DCE)
 4. Data Collection Rule (DCR) with data transformation
 5. Connector definition in Sentinel portal
-6. Parser function (Workbench only)
+6. Parser function (Workbench: `TrendMicroWorkbench_Complete`, OAT: `TrendMicroOAT_Complete`)
 7. Analytic rule template (disabled by default)
 8. Workbook dashboard for monitoring
 
@@ -139,7 +175,7 @@ mainTemplate.json (Orchestrator)
   ├─> dce.json                    # Data Collection Endpoint
   ├─> dcr.json                    # Data Collection Rule (transforms data)
   ├─> connector-definition.json   # Connector UI in portal
-  ├─> parser-function.json        # KQL parser (Workbench only)
+  ├─> parser-function.json        # KQL parser (Workbench + OAT; universal old+new)
   ├─> analytic-rule.json          # Incident creation rule (disabled)
   └─> workbook.json               # Monitoring dashboard
 ```
@@ -230,7 +266,7 @@ templates/
 ├── oat/                    # OAT connector (modular)
 │   ├── mainTemplate.json
 │   ├── createUiDefinition.json
-│   └── components/         # 5 modular components
+│   └── components/         # modular components (incl. parser-function.json)
 │
 ├── legacy/                 # Archived old templates
 └── ARCHITECTURE.md         # Detailed architecture documentation
@@ -289,9 +325,20 @@ az deployment group create \
 
 ## 📚 Documentation
 
-- [Architecture Details](templates/ARCHITECTURE.md) - Deep dive into component design
-- [Workbench Modular Summary](MODULAR_TEMPLATE_SUMMARY.md) - Workbench implementation details
-- [OAT Modular Summary](OAT_MODULAR_SUMMARY.md) - OAT implementation details
+New here? Start with the **[docs/](docs/)** folder — detailed, plain-language guides written for every experience level:
+
+- [Docs home](docs/README.md) — the map of all guides
+- [Concepts — how it all fits together](docs/01-concepts.md) — what this is and *why* it's built this way
+- [Permissions you need (and why)](docs/02-permissions.md) — every Azure & Trend Vision One permission, explained
+- [Deploying the connector](docs/03-deployment.md) — step-by-step, portal and CLI
+- [Using the connector day to day](docs/04-using-the-connector.md) — verify data, query, alerts, dashboards, filters
+- [Migrating from the old connector](docs/05-migration.md) — move off the old Azure Function connector safely
+- [Troubleshooting](docs/06-troubleshooting.md) — fix the common problems
+
+Deeper / maintainer references:
+
+- [Architecture Details](templates/ARCHITECTURE.md) — deep dive into component design
+- [Internal test-deploy notes](docs/internal/test-deploy.md) — 🔒 maintainers only, removed before going public
 
 ## 🤝 Support
 

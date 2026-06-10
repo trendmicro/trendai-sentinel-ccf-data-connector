@@ -222,6 +222,10 @@
         "dcrImmutableId": {
             "type": "string",
             "value": "[reference('dataCollectionRule').outputs.dcrImmutableId.value]"
+        },
+        "parserFunctionName": {
+            "type": "string",
+            "value": "[reference('parserFunction').outputs.functionName.value]"
         }
     }
 }
