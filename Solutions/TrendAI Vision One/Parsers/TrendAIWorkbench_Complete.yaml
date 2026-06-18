@@ -9,7 +9,7 @@ Function:
   Category: TrendAI
   FunctionQuery: |
     union isfuzzy=true
-        (TrendAI_XDR_WORKBENCH_CL),
+        (TrendMicro_XDR_WORKBENCH_CL),
         (TrendAI_XDR_WORKBENCH_V2_CL
          | extend indicators_array = iff(isnull(indicators), parse_json(indicators_s), indicators)
          | extend impactScope_parsed = iff(isnull(entities), parse_json(impactScope_s), dynamic(null))

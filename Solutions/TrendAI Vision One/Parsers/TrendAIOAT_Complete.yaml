@@ -9,7 +9,7 @@ Function:
   Category: TrendAI
   FunctionQuery: |
     union isfuzzy=true
-        (TrendAI_XDR_OAT_CL
+        (TrendMicro_XDR_OAT_CL
          | extend source_table = "legacy"
         ),
         (TrendAI_XDR_OAT_V2_CL

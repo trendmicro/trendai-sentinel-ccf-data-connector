@@ -63,10 +63,6 @@
                                 "type": "string"
                             },
                             {
-                                "name": "productCode",
-                                "type": "string"
-                            },
-                            {
                                 "name": "endpoint",
                                 "type": "dynamic"
                             },
@@ -97,7 +93,7 @@
                         "destinations": [
                             "clv2ws1"
                         ],
-                        "transformKql": "[concat('source | extend d = detail', if(parameters('excludeThirdPartyOat'), ' | where tostring(productCode) != ''tlc''', ''), ' | extend ', variables('oatTransformBody'))]",
+                        "transformKql": "[concat('source | extend d = detail', if(parameters('excludeThirdPartyOat'), ' | where tostring(d.productCode) != ''tlc''', ''), ' | extend ', variables('oatTransformBody'))]",
                         "outputStream": "Custom-TrendMicro_XDR_OAT_V2_CL"
                     }
                 ]
