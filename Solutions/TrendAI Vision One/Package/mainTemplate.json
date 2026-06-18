@@ -515,14 +515,14 @@
       "properties": {
         "connectorUiConfig": {
           "id": "[variables('workbenchConnectorId')]",
-          "title": "TrendAI Vision One - Workbench Alerts (via Codeless Connector Framework)",
+          "title": "TrendAI Vision One™ - Workbench Alerts (via Codeless Connector Framework)",
           "publisher": "TrendAI",
           "logo": "[variables('logo')]",
-          "descriptionMarkdown": "The [TrendAI Vision One](https://www.trendmicro.com/en_us/business/products/detection-response/xdr.html) Workbench data connector ingests security alerts from the TrendAI Vision One Workbench API into Microsoft Sentinel. It uses the Codeless Connector Framework (CCF) with DCR-based ingestion-time transformations.",
+          "descriptionMarkdown": "The [TrendAI Vision One™](https://www.trendmicro.com/en_us/business/products/detection-response/xdr.html) Workbench data connector ingests security alerts from the TrendAI Vision One™ into Microsoft Sentinel.",
           "graphQueriesTableName": "[variables('workbenchTableName')]",
           "graphQueries": [{
             "metricName": "Total Workbench alerts received",
-            "legend": "TrendAI Vision One Workbench Alerts",
+            "legend": "TrendAI Vision One™ Workbench Alerts",
             "baseQuery": "[variables('workbenchTableName')]"
           }],
           "sampleQueries": [
@@ -545,14 +545,13 @@
             }]
           },
           "instructionSteps": [{
-            "title": "Connect TrendAI Vision One - Workbench Alerts",
             "instructions": [
-              {"type": "Markdown", "parameters": {"content": "#### Prerequisites\n1. You need a TrendAI Vision One account with API access.\n2. Generate an API token with **SIEM** role permissions."}},
-              {"type": "Markdown", "parameters": {"content": "#### Select your TrendAI Vision One Region\nChoose the API domain that matches the region where your TrendAI Vision One tenant is hosted:\n- **US:** `api.xdr.trendmicro.com`\n- **EU:** `api.eu.xdr.trendmicro.com`\n- **SG:** `api.sg.xdr.trendmicro.com`\n- **JP:** `api.xdr.trendmicro.co.jp` / `api.jp.xdr.trendmicro.co.jp`\n- **AU:** `api.au.xdr.trendmicro.com`\n- **IN:** `api.in.xdr.trendmicro.com`\n- **MEA:** `api.mea.xdr.trendmicro.com`\n- **UK:** `api.uk.xdr.trendmicro.com`\n- **CA:** `api.ca.xdr.trendmicro.com`\n- **ZA (South Africa):** `api.za.xdr.trendmicro.com`"}},
-              {"type": "Textbox", "parameters": {"label": "API Domain", "placeholder": "api.xdr.trendmicro.com", "type": "text", "name": "apiDomain"}},
-              {"type": "Textbox", "parameters": {"label": "API Token", "placeholder": "Paste your TrendAI Vision One API token here", "type": "password", "name": "apiToken"}},
-              {"type": "Textbox", "parameters": {"label": "TMV1-Filter (Optional)", "placeholder": "e.g. severity ge 'high'", "type": "text", "name": "workbenchFilter"}},
-              {"type": "ConnectionToggleButton", "parameters": {"connectLabel": "Connect", "name": "toggle"}}
+              {"type": "Markdown", "parameters": {"content": "#### 1. Retrieve your TrendAI Vision One™ API Token\n1. Log in to the TrendAI Vision One™ Console.\n2. Navigate to **Administration → API Keys**.\n3. Click **Generate New API Key**, select the **SIEM** role, and copy the token."}},
+              {"type": "Markdown", "parameters": {"content": "#### 2. Select your TrendAI Vision One™ Region\nChoose the API domain that matches the region where your TrendAI Vision One™ tenant is hosted:\n- **US:** `api.xdr.trendmicro.com`\n- **EU:** `api.eu.xdr.trendmicro.com`\n- **SG:** `api.sg.xdr.trendmicro.com`\n- **JP:** `api.xdr.trendmicro.co.jp` / `api.jp.xdr.trendmicro.co.jp`\n- **AU:** `api.au.xdr.trendmicro.com`\n- **IN:** `api.in.xdr.trendmicro.com`\n- **MEA:** `api.mea.xdr.trendmicro.com`\n- **UK:** `api.uk.xdr.trendmicro.com`\n- **CA:** `api.ca.xdr.trendmicro.com`\n- **ZA (South Africa):** `api.za.xdr.trendmicro.com`"}},
+              {"type": "Textbox", "parameters": {"label": "API Domain", "placeholder": "api.xdr.trendmicro.com", "type": "text", "name": "apiDomain", "required": true}},
+              {"type": "Textbox", "parameters": {"label": "API Token", "placeholder": "Paste your TrendAI Vision One™ API token here", "type": "password", "name": "apiToken", "required": true}},
+              {"type": "Textbox", "parameters": {"label": "TMV1-Filter (Optional)", "placeholder": "investigationStatus eq 'New' and contains(impactScopeEntityValue,'nimda')", "type": "text", "name": "workbenchFilter", "required": false}},
+              {"type": "ConnectionToggleButton", "parameters": {"label": "toggle", "name": "toggle"}}
             ]
           }]
         },
@@ -576,14 +575,14 @@
       "properties": {
         "connectorUiConfig": {
           "id": "[variables('oatConnectorId')]",
-          "title": "TrendAI Vision One - OAT Detections (via Codeless Connector Framework)",
+          "title": "TrendAI Vision One™ - OAT Detections (via Codeless Connector Framework)",
           "publisher": "TrendAI",
           "logo": "[variables('logo')]",
-          "descriptionMarkdown": "The [TrendAI Vision One](https://www.trendmicro.com/en_us/business/products/detection-response/xdr.html) OAT data connector ingests Observed Attack Techniques (OAT) detections from the TrendAI Vision One API into Microsoft Sentinel. Detections include full process trees, file hashes, network indicators, and MITRE ATT&CK mappings.",
+          "descriptionMarkdown": "The [TrendAI Vision One™](https://www.trendmicro.com/en_us/business/products/detection-response/xdr.html) OAT data connector ingests Observed Attack Techniques (OAT) detections from the TrendAI Vision One™ into Microsoft Sentinel. Detections include full process trees, file hashes, network indicators, and MITRE ATT&CK mappings.",
           "graphQueriesTableName": "[variables('oatTableName')]",
           "graphQueries": [{
             "metricName": "Total OAT detections received",
-            "legend": "TrendAI Vision One OAT Detections",
+            "legend": "TrendAI Vision One™ OAT Detections",
             "baseQuery": "[variables('oatTableName')]"
           }],
           "sampleQueries": [
@@ -606,15 +605,14 @@
             }]
           },
           "instructionSteps": [{
-            "title": "Connect TrendAI Vision One - OAT Detections",
             "instructions": [
-              {"type": "Markdown", "parameters": {"content": "#### Prerequisites\n1. You need a TrendAI Vision One account with API access.\n2. Generate an API token with **SIEM** role permissions."}},
-              {"type": "Markdown", "parameters": {"content": "#### Select your TrendAI Vision One Region\nChoose the API domain that matches the region where your TrendAI Vision One tenant is hosted:\n- **US:** `api.xdr.trendmicro.com`\n- **EU:** `api.eu.xdr.trendmicro.com`\n- **SG:** `api.sg.xdr.trendmicro.com`\n- **JP:** `api.xdr.trendmicro.co.jp` / `api.jp.xdr.trendmicro.co.jp`\n- **AU:** `api.au.xdr.trendmicro.com`\n- **IN:** `api.in.xdr.trendmicro.com`\n- **MEA:** `api.mea.xdr.trendmicro.com`\n- **UK:** `api.uk.xdr.trendmicro.com`\n- **CA:** `api.ca.xdr.trendmicro.com`\n- **ZA (South Africa):** `api.za.xdr.trendmicro.com`"}},
-              {"type": "Textbox", "parameters": {"label": "API Domain", "placeholder": "api.xdr.trendmicro.com", "type": "text", "name": "apiDomain"}},
-              {"type": "Textbox", "parameters": {"label": "API Token", "placeholder": "Paste your TrendAI Vision One API token here", "type": "password", "name": "apiToken"}},
-              {"type": "Textbox", "parameters": {"label": "TMV1-Filter (Optional)", "placeholder": "e.g. riskLevel eq 'high'", "type": "text", "name": "oatFilter"}},
-              {"type": "Textbox", "parameters": {"label": "Exclude Third-Party OAT (enter 'true' or 'false')", "placeholder": "false", "type": "text", "name": "excludeThirdPartyOat"}},
-              {"type": "ConnectionToggleButton", "parameters": {"connectLabel": "Connect", "name": "toggle"}}
+              {"type": "Markdown", "parameters": {"content": "#### 1. Retrieve your TrendAI Vision One™ API Token\n1. Log in to the TrendAI Vision One™ Console.\n2. Navigate to **Administration → API Keys**.\n3. Click **Generate New API Key**, select the **SIEM** role, and copy the token."}},
+              {"type": "Markdown", "parameters": {"content": "#### 2. Select your TrendAI Vision One™ Region\nChoose the API domain that matches the region where your TrendAI Vision One™ tenant is hosted:\n- **US:** `api.xdr.trendmicro.com`\n- **EU:** `api.eu.xdr.trendmicro.com`\n- **SG:** `api.sg.xdr.trendmicro.com`\n- **JP:** `api.xdr.trendmicro.co.jp` / `api.jp.xdr.trendmicro.co.jp`\n- **AU:** `api.au.xdr.trendmicro.com`\n- **IN:** `api.in.xdr.trendmicro.com`\n- **MEA:** `api.mea.xdr.trendmicro.com`\n- **UK:** `api.uk.xdr.trendmicro.com`\n- **CA:** `api.ca.xdr.trendmicro.com`\n- **ZA (South Africa):** `api.za.xdr.trendmicro.com`"}},
+              {"type": "Textbox", "parameters": {"label": "API Domain", "placeholder": "api.xdr.trendmicro.com", "type": "text", "name": "apiDomain", "required": true}},
+              {"type": "Textbox", "parameters": {"label": "API Token", "placeholder": "Paste your TrendAI Vision One™ API token here", "type": "password", "name": "apiToken", "required": true}},
+              {"type": "Textbox", "parameters": {"label": "TMV1-Filter (Optional)", "placeholder": "(riskLevel eq 'high') and (endpointName eq 'my-computer')", "type": "text", "name": "oatFilter", "required": false}},
+              {"type": "Textbox", "parameters": {"label": "Exclude third-party OAT detections (productCode == 'tlc')", "type": "boolean", "name": "excludeThirdPartyOat", "required": false}},
+              {"type": "ConnectionToggleButton", "parameters": {"label": "toggle", "name": "toggle"}}
             ]
           }]
         },
