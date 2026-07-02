@@ -50,10 +50,14 @@
     "workbenchConnectorId": "TrendAIVisionOneWorkbench",
     "oatConnectorId": "TrendAIVisionOneOAT",
     "logo": "data:image/svg+xml;base64,PHN2ZyB2aWV3Qm94PSIwIDAgMjQgMjQiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxwYXRoIGQ9Ik01LjI1MDEzIDkuNzM3MjdDNi4yMjk1NCAxMC43MzY3IDcuMTgzNzEgMTEuOTc0IDcuNDA1NTMgMTMuMjgwM0M3LjgwNDc2IDExLjA0MTIgMTAuODE3MiA3Ljk5MzM4IDEzLjA2NTcgNy42MDczMUMxMC44MzE4IDcuMjQ1MjkgNy43NjA0OSA0LjE3MjUxIDcuNDA1NyAxLjkyOTY5QzcuMDAzNDcgNC4xNDI2MiAzLjk3MDAzIDcuMjE3ODIgMS43NDUzNyA3LjYwNDAzQzMuMDQxOTIgNy44Mjc1OSA0LjI1NDcyIDguNzY0NjggNS4yNTAxMyA5LjczNzI3WiIgZmlsbD0iI0Q3MTkyMCIvPgo8cGF0aCBkPSJNMjMuMDgyMyAzLjMyNzY0QzIwLjc3MDcgMC41NjYwOTMgMTYuNDczMyAxLjQwOTQ5IDEzLjE1NCAyLjc1OTNDMTguNDIxOCAxLjA5NDcyIDIzLjI1MjQgMy4yODUwMiAyMC43MzE3IDkuNTQ2MTFDMTkuNDgzIDEyLjYyNDMgMTYuMzQyMSAxNS43NzI4IDEzLjMzMjIgMTcuNTUyNkMxMS43NDI4IDE4LjU4MDEgMTAuMDQyNyAxOS40NDU1IDguMTkwMDYgMTkuNzA0NkM1LjMzOTggMjAuMDk1NyAzLjYzMTY1IDE4LjYyNDIgNC4zNTY2MyAxNS42ODM3QzQuNTM5NDUgMTQuOTY1NyA0Ljg3MjI2IDE0LjI0MDggNS4yMDI2OCAxMy41MzU2QzQuNjU4NzIgMTIuMjQ0NiAzLjQ4ODM3IDEwLjkyMzkgMi4yMzIzOCAxMC41NTY5QzEuNTU1MzMgMTEuNTc1NiAxLjA2MjcyIDEyLjQ5NzcgMC41NjE0OTUgMTMuOTIzNUMtMC41NzI4MTIgMTYuOTg3OCAtMC4yMDIzMDIgMjEuNDg3MyAzLjY3MzY1IDIyLjQ2MDlDMTAuNzY2OCAyMy44NzQxIDIwLjM2MiAxNi4zMzQ2IDIzLjA5MzEgMTAuMDUxNUMyNC4yNjIgNy40MDM0NSAyNC4zNDU2IDQuOTU1ODggMjMuMDgyMyAzLjMyNzY0WiIgZmlsbD0iI0Q3MTkyMCIvPgo8L3N2Zz4K",
-    "oatTransformBody": "TimeGenerated = detectedDateTime, SourceSystem = 'RestAPI', Computer = '', RawData = tostring(detail), detectionTime_t = todatetime(detectedDateTime), entityType_s = tostring(entityType), entityName_s = tostring(entityName), filters_s = tostring(filters), endpoint_ips_s = tostring(endpoint.ips), endpoint_name_s = tostring(endpoint.endpointName), endpoint_guid_g = tostring(endpoint.agentGuid), xdrCustomerId_g = '', detail_endpointGuid_g = tostring(d.endpointGuid), detail_eventId_s = tostring(d.eventId), detail_eventSubId_s = tostring(d.eventSubId), detail_firstSeen_t = todatetime(datetime(1970-01-01) + tolong(d.firstSeen) * 1ms), detail_lastSeen_t = todatetime(datetime(1970-01-01) + tolong(d.lastSeen) * 1ms), detail_logonUser_s = tostring(d.logonUser), detail_objectCmd_s = tostring(d.objectCmd), detail_objectFileCreation_d = toreal(d.objectFileCreation), detail_objectFileHashSha256_s = tostring(d.objectFileHashSha256), detail_objectFileModifiedTime_d = toreal(d.objectFileModifiedTime), detail_objectFileSize_d = toreal(d.objectFileSize), detail_objectLaunchTime_d = toreal(d.objectLaunchTime), detail_objectName_s = tostring(d.objectName), detail_objectRunAsLocalAccount_b = tobool(d.objectRunAsLocalAccount), detail_objectSigner_s = tostring(d.objectSigner), detail_objectSignerValid_s = tostring(d.objectSignerValid), detail_objectTrueType_d = toreal(d.objectTrueType), detail_objectUser_s = tostring(d.objectUser), detail_objectUserDomain_s = tostring(d.objectUserDomain), detail_osName_s = tostring(d.osName), detail_osType_s = tostring(d.osType), detail_osVer_s = tostring(d.osVer), detail_parentCmd_s = tostring(d.parentCmd), detail_parentFileCreation_d = toreal(d.parentFileCreation), detail_parentFileHashSha1_s = tostring(d.parentFileHashSha1), detail_parentFileHashSha256_s = tostring(d.parentFileHashSha256), detail_parentFileModifiedTime_d = toreal(d.parentFileModifiedTime), detail_parentFilePath_s = tostring(d.parentFilePath), detail_parentFileSize_d = toreal(d.parentFileSize), detail_parentLaunchTime_d = toreal(d.parentLaunchTime), detail_parentName_s = tostring(d.parentName), detail_parentTrueType_d = toreal(d.parentTrueType), detail_parentUser_s = tostring(d.parentUser), detail_parentUserDomain_s = tostring(d.parentUserDomain), detail_processCmd_s = tostring(d.processCmd), detail_processFileCreation_d = toreal(d.processFileCreation), detail_processFileHashSha1_s = tostring(d.processFileHashSha1), detail_processFileHashSha256_s = tostring(d.processFileHashSha256), detail_processFileModifiedTime_d = toreal(d.processFileModifiedTime), detail_processFilePath_s = tostring(d.processFilePath), detail_processFileSize_d = toreal(d.processFileSize), detail_processLaunchTime_d = toreal(d.processLaunchTime), detail_processPid_d = toreal(d.processPid), detail_processSigner_s = tostring(d.processSigner), detail_processSignerValid_s = tostring(d.processSignerValid), detail_processTrueType_d = toreal(d.processTrueType), detail_processUser_s = tostring(d.processUser), detail_processUserDomain_s = tostring(d.processUserDomain), detail_hostName_s = tostring(d.hostName), detail_endpointHostName_s = tostring(d.endpointHostName), detail_filterRiskLevel_s = tostring(d.filterRiskLevel), detail_ruleName_s = tostring(d.ruleName), detail_malName_s = tostring(d.malName), detail_src_s = tostring(d.src), detail_dst_s = tostring(d.dst), detail_spt_d = toreal(d.spt), detail_dpt_d = toreal(d.dpt)",
+    "oatTransformBody": "TimeGenerated = todatetime(detectedDateTime), SourceSystem = 'RestAPI', Computer = '', RawData = tostring(detail), detectionTime_t = todatetime(detectedDateTime), entityType_s = tostring(entityType), entityName_s = tostring(entityName), filters_s = tostring(filters), endpoint_ips_s = tostring(endpoint.ips), endpoint_name_s = tostring(endpoint.endpointName), endpoint_guid_g = tostring(endpoint.agentGuid), xdrCustomerId_g = '', detail_endpointGuid_g = tostring(d.endpointGuid), detail_eventId_s = tostring(d.eventId), detail_eventSubId_s = tostring(d.eventSubId), detail_firstSeen_t = todatetime(datetime(1970-01-01) + tolong(d.firstSeen) * 1ms), detail_lastSeen_t = todatetime(datetime(1970-01-01) + tolong(d.lastSeen) * 1ms), detail_logonUser_s = tostring(d.logonUser), detail_objectCmd_s = tostring(d.objectCmd), detail_objectFileCreation_d = toreal(d.objectFileCreation), detail_objectFileHashSha256_s = tostring(d.objectFileHashSha256), detail_objectFileModifiedTime_d = toreal(d.objectFileModifiedTime), detail_objectFileSize_d = toreal(d.objectFileSize), detail_objectLaunchTime_d = toreal(d.objectLaunchTime), detail_objectName_s = tostring(d.objectName), detail_objectRunAsLocalAccount_b = tobool(d.objectRunAsLocalAccount), detail_objectSigner_s = tostring(d.objectSigner), detail_objectSignerValid_s = tostring(d.objectSignerValid), detail_objectTrueType_d = toreal(d.objectTrueType), detail_objectUser_s = tostring(d.objectUser), detail_objectUserDomain_s = tostring(d.objectUserDomain), detail_osName_s = tostring(d.osName), detail_osType_s = tostring(d.osType), detail_osVer_s = tostring(d.osVer), detail_parentCmd_s = tostring(d.parentCmd), detail_parentFileCreation_d = toreal(d.parentFileCreation), detail_parentFileHashSha1_s = tostring(d.parentFileHashSha1), detail_parentFileHashSha256_s = tostring(d.parentFileHashSha256), detail_parentFileModifiedTime_d = toreal(d.parentFileModifiedTime), detail_parentFilePath_s = tostring(d.parentFilePath), detail_parentFileSize_d = toreal(d.parentFileSize), detail_parentLaunchTime_d = toreal(d.parentLaunchTime), detail_parentName_s = tostring(d.parentName), detail_parentTrueType_d = toreal(d.parentTrueType), detail_parentUser_s = tostring(d.parentUser), detail_parentUserDomain_s = tostring(d.parentUserDomain), detail_processCmd_s = tostring(d.processCmd), detail_processFileCreation_d = toreal(d.processFileCreation), detail_processFileHashSha1_s = tostring(d.processFileHashSha1), detail_processFileHashSha256_s = tostring(d.processFileHashSha256), detail_processFileModifiedTime_d = toreal(d.processFileModifiedTime), detail_processFilePath_s = tostring(d.processFilePath), detail_processFileSize_d = toreal(d.processFileSize), detail_processLaunchTime_d = toreal(d.processLaunchTime), detail_processPid_d = toreal(d.processPid), detail_processSigner_s = tostring(d.processSigner), detail_processSignerValid_s = tostring(d.processSignerValid), detail_processTrueType_d = toreal(d.processTrueType), detail_processUser_s = tostring(d.processUser), detail_processUserDomain_s = tostring(d.processUserDomain), detail_hostName_s = tostring(d.hostName), detail_endpointHostName_s = tostring(d.endpointHostName), detail_filterRiskLevel_s = tostring(d.filterRiskLevel), detail_ruleName_s = tostring(d.ruleName), detail_malName_s = tostring(d.malName), detail_src_s = tostring(d.src), detail_dst_s = tostring(d.dst), detail_spt_d = toreal(d.spt), detail_dpt_d = toreal(d.dpt)",
     "oatTransformKql": "[concat('source | extend d = detail', if(parameters('excludeThirdPartyOat'), ' | where tostring(d.productCode) != ''tlc''', ''), ' | extend ', variables('oatTransformBody'))]",
     "parserName1": "TrendAIWorkbench_Complete",
     "parserName2": "TrendAIOAT_Complete",
+    "workbookId": "TrendAIVisionOneWorkbenchOverview",
+    "workbookDisplayName": "TrendAI Vision One - Workbench Overview",
+    "analyticRuleId": "2f668615-c372-4673-a5cd-773e4da715b9",
+    "analyticRuleName": "TrendAI Vision One - Create Incident for Workbench Alerts",
     "_solutioncontentProductId": "[concat(take(variables('_solutionId'),50),'-','sl','-', uniqueString(concat(variables('_solutionId'),'-','Solution','-',variables('_solutionId'),'-', variables('_solutionVersion'))))]",
     "dataConnectorCCPVersion": "1.0.0",
     "_workbenchConnectionsContentId": "[concat(variables('workbenchConnectorId'), 'Connections')]",
@@ -288,8 +292,8 @@
             "columns": [
               {"name": "source", "type": "string"},
               {"name": "uuid", "type": "string"},
-              {"name": "detectedDateTime", "type": "datetime"},
-              {"name": "ingestedDateTime", "type": "datetime"},
+              {"name": "detectedDateTime", "type": "string"},
+              {"name": "ingestedDateTime", "type": "string"},
               {"name": "entityType", "type": "string"},
               {"name": "entityName", "type": "string"},
               {"name": "filters", "type": "dynamic"},
@@ -644,6 +648,111 @@
       }
     },
     {
+      "type": "Microsoft.Insights/workbooks",
+      "apiVersion": "2022-04-01",
+      "name": "[guid(variables('workbookId'), parameters('workspace'))]",
+      "location": "[parameters('workspace-location')]",
+      "kind": "shared",
+      "dependsOn": [
+        "[resourceId('Microsoft.OperationalInsights/workspaces/tables', parameters('workspace'), variables('workbenchTableName'))]"
+      ],
+      "properties": {
+        "displayName": "[variables('workbookDisplayName')]",
+        "serializedData": "{\"version\":\"Notebook/1.0\",\"items\":[{\"type\":1,\"content\":{\"json\":\"## TrendAI Vision One - Workbench Alerts\\n---\\n[TrendAI Success Portal](https://success.trendmicro.com)\\n\\nIf you have any feedback, please send to <xdrfeedback@trendmicro.com>\"},\"name\":\"text - 0\"},{\"type\":3,\"content\":{\"version\":\"KqlItem/1.0\",\"query\":\"TrendAI_XDR_WORKBENCH_V2_CL\\n| summarize Alerts = count() by bin(TimeGenerated,1d), severity_s\\n| where TimeGenerated >= ago(7d)\\n| render columnchart kind=stacked\",\"size\":0,\"title\":\"Workbench Alerts Last 7 Days\",\"timeContext\":{\"durationMs\":604800000},\"queryType\":0,\"resourceType\":\"microsoft.operationalinsights/workspaces\",\"chartSettings\":{\"seriesLabelSettings\":[{\"seriesName\":\"low\",\"label\":\"Low\",\"color\":\"yellow\"},{\"seriesName\":\"medium\",\"label\":\"Medium\",\"color\":\"orange\"},{\"seriesName\":\"high\",\"label\":\"High\",\"color\":\"redBright\"},{\"seriesName\":\"critical\",\"label\":\"Critical\",\"color\":\"redDark\"}]}},\"name\":\"query - 1\"},{\"type\":3,\"content\":{\"version\":\"KqlItem/1.0\",\"query\":\"TrendAI_XDR_WORKBENCH_V2_CL\\n| summarize Alerts = count() by bin(TimeGenerated,1d), severity_s\\n| where TimeGenerated >= ago(30d)\\n| render columnchart kind=stacked\",\"size\":0,\"title\":\"Workbench Alerts Last 30 Days\",\"timeContext\":{\"durationMs\":2592000000},\"queryType\":0,\"resourceType\":\"microsoft.operationalinsights/workspaces\",\"chartSettings\":{\"seriesLabelSettings\":[{\"seriesName\":\"low\",\"label\":\"Low\",\"color\":\"yellow\"},{\"seriesName\":\"medium\",\"label\":\"Medium\",\"color\":\"orange\"},{\"seriesName\":\"high\",\"label\":\"High\",\"color\":\"redBright\"},{\"seriesName\":\"critical\",\"label\":\"Critical\",\"color\":\"redDark\"}]}},\"name\":\"query - 2\"},{\"type\":3,\"content\":{\"version\":\"KqlItem/1.0\",\"query\":\"TrendAI_XDR_WORKBENCH_V2_CL\\n| summarize Alerts = count() by severity_s\\n| render piechart\",\"size\":0,\"title\":\"Alerts by Severity\",\"queryType\":0,\"resourceType\":\"microsoft.operationalinsights/workspaces\",\"chartSettings\":{\"seriesLabelSettings\":[{\"seriesName\":\"low\",\"label\":\"Low\",\"color\":\"yellow\"},{\"seriesName\":\"medium\",\"label\":\"Medium\",\"color\":\"orange\"},{\"seriesName\":\"high\",\"label\":\"High\",\"color\":\"redBright\"},{\"seriesName\":\"critical\",\"label\":\"Critical\",\"color\":\"redDark\"}]}},\"name\":\"query - 3\"},{\"type\":3,\"content\":{\"version\":\"KqlItem/1.0\",\"query\":\"TrendAI_XDR_WORKBENCH_V2_CL\\n| summarize Alerts = count() by bin(TimeGenerated,1d), model_s\\n| where TimeGenerated >= ago(30d)\\n| render columnchart kind=stacked\",\"size\":0,\"title\":\"Detection Models Last 30 Days\",\"queryType\":0,\"resourceType\":\"microsoft.operationalinsights/workspaces\"},\"name\":\"query - 4\"},{\"type\":3,\"content\":{\"version\":\"KqlItem/1.0\",\"query\":\"TrendAI_XDR_WORKBENCH_V2_CL\\n| where isnotempty(HostHostName_s) and HostHostName_s != '[]'\\n| summarize Alerts = count() by HostHostName_s\\n| top 10 by Alerts desc\",\"size\":0,\"title\":\"Top 10 Affected Hosts\",\"queryType\":0,\"resourceType\":\"microsoft.operationalinsights/workspaces\"},\"name\":\"query - 5\"}],\"styleSettings\":{},\"fromTemplateId\":\"sentinel-TrendAIVisionOneWorkbench\",\"$schema\":\"https://github.com/Microsoft/Application-Insights-Workbooks/blob/master/schema/workbook.json\"}",
+        "version": "1.0",
+        "sourceId": "[variables('workspaceResourceId')]",
+        "category": "sentinel"
+      }
+    },
+    {
+      "type": "Microsoft.OperationalInsights/workspaces/providers/alertRules",
+      "apiVersion": "2023-02-01-preview",
+      "name": "[concat(parameters('workspace'), '/Microsoft.SecurityInsights/', variables('analyticRuleId'))]",
+      "kind": "Scheduled",
+      "dependsOn": [
+        "[resourceId('Microsoft.OperationalInsights/workspaces/tables', parameters('workspace'), variables('workbenchTableName'))]"
+      ],
+      "properties": {
+        "displayName": "[variables('analyticRuleName')]",
+        "description": "Creates an incident based on TrendAI Vision One Workbench Alerts and maps the impacted entities for Microsoft Sentinel usage.",
+        "severity": "High",
+        "enabled": true,
+        "query": "TrendAI_XDR_WORKBENCH_V2_CL\n| extend Severity = case(severity_s == \"low\", \"Informational\",\n                        severity_s == \"medium\", \"Low\",\n                        severity_s == \"high\", \"Medium\",\n                        \"High\"\n                        )\n| extend\n    UserAccountName_s = todynamic(column_ifexists(\"UserAccountName_s\", \"[]\")),\n    UserAccountNTDomain_s = todynamic(column_ifexists(\"UserAccountNTDomain_s\", \"[]\")),\n    FileName_s = todynamic(column_ifexists(\"FileName_s\", \"[]\")),\n    FileDirectory_s = todynamic(column_ifexists(\"FileDirectory_s\", \"[]\")),\n    ProcessCommandLine_s = todynamic(column_ifexists(\"ProcessCommandLine_s\", \"[]\")),\n    RegistryKey_s = todynamic(column_ifexists(\"RegistryKey_s\", \"[]\")),\n    RegistryValue_s = todynamic(column_ifexists(\"RegistryValue_s\", \"[]\")),\n    RegistryValueName_s = todynamic(column_ifexists(\"RegistryValueName_s\", \"[]\"))",
+        "queryFrequency": "PT5M",
+        "queryPeriod": "PT5M",
+        "triggerOperator": "GreaterThan",
+        "triggerThreshold": 0,
+        "suppressionDuration": "PT5H",
+        "suppressionEnabled": false,
+        "tactics": [],
+        "techniques": [],
+        "incidentConfiguration": {
+          "createIncident": true,
+          "groupingConfiguration": {
+            "enabled": true,
+            "reopenClosedIncident": false,
+            "lookbackDuration": "PT5M",
+            "matchingMethod": "Selected",
+            "groupByCustomDetails": ["WorkbenchID"]
+          }
+        },
+        "entityMappings": [
+          {
+            "entityType": "Account",
+            "fieldMappings": [
+              {"identifier": "Name", "columnName": "UserAccountName_s"},
+              {"identifier": "NTDomain", "columnName": "UserAccountNTDomain_s"}
+            ]
+          },
+          {
+            "entityType": "File",
+            "fieldMappings": [
+              {"identifier": "Name", "columnName": "FileName_s"},
+              {"identifier": "Directory", "columnName": "FileDirectory_s"}
+            ]
+          },
+          {
+            "entityType": "Process",
+            "fieldMappings": [
+              {"identifier": "CommandLine", "columnName": "ProcessCommandLine_s"}
+            ]
+          },
+          {
+            "entityType": "RegistryKey",
+            "fieldMappings": [
+              {"identifier": "Key", "columnName": "RegistryKey_s"}
+            ]
+          },
+          {
+            "entityType": "RegistryValue",
+            "fieldMappings": [
+              {"identifier": "Name", "columnName": "RegistryValueName_s"},
+              {"identifier": "Value", "columnName": "RegistryValue_s"}
+            ]
+          }
+        ],
+        "alertDetailsOverride": {
+          "alertDisplayNameFormat": "{{workbenchName_s}}",
+          "alertDescriptionFormat": "{{description_s}}",
+          "alertSeverityColumnName": "Severity"
+        },
+        "customDetails": {
+          "XDRCustomerID": "xdrCustomerID_g",
+          "WorkbenchID": "workbenchId_s",
+          "WorkbenchName": "workbenchName_s",
+          "WorkbenchLink": "workbenchLink_s",
+          "PriorityScore": "priorityScore_d",
+          "CreatedAt": "createdTime_t",
+          "Severity": "severity_s",
+          "ImpactScopeSummary": "impactScope_Summary_s",
+          "Provider": "alertProvider_s"
+        },
+        "eventGroupingSettings": {
+          "aggregationKind": "AlertPerResult"
+        }
+      }
+    },
+    {
       "type": "Microsoft.OperationalInsights/workspaces/providers/contentPackages",
       "apiVersion": "2023-04-01-preview",
       "name": "[concat(parameters('workspace'), '/Microsoft.SecurityInsights/', variables('_solutionId'))]",
@@ -680,7 +789,9 @@
             {"kind": "DataConnector", "contentId": "[variables('workbenchConnectorId')]", "version": "[variables('_solutionVersion')]"},
             {"kind": "DataConnector", "contentId": "[variables('oatConnectorId')]", "version": "[variables('_solutionVersion')]"},
             {"kind": "Parser", "contentId": "[variables('parserName1')]", "version": "[variables('_solutionVersion')]"},
-            {"kind": "Parser", "contentId": "[variables('parserName2')]", "version": "[variables('_solutionVersion')]"}
+            {"kind": "Parser", "contentId": "[variables('parserName2')]", "version": "[variables('_solutionVersion')]"},
+            {"kind": "Workbook", "contentId": "[variables('workbookId')]", "version": "[variables('_solutionVersion')]"},
+            {"kind": "AnalyticsRule", "contentId": "[variables('analyticRuleId')]", "version": "[variables('_solutionVersion')]"}
           ]
         },
         "categories": {
