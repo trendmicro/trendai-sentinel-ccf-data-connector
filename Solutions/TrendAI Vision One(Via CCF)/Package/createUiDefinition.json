@@ -175,8 +175,8 @@
       }
     ],
     "outputs": {
-      "workspace-location": "[first(map(filter(basics('getLAWorkspace').value, (filter) => equals(filter.name,basics('workspace'))), (item) => item.location))]",
       "location": "[location()]",
+      "workspace-location": "[first(map(filter(basics('getLAWorkspace').value, (filter) => equals(filter.name,basics('workspace'))), (item) => item.location))]",
       "workspace": "[basics('workspace')]",
       "excludeThirdPartyOat": "[steps('dataconnectors').excludeThirdPartyOat]"
     }

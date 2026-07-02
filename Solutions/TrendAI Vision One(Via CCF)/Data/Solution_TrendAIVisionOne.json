@@ -14,8 +14,8 @@
     "Parsers/TrendAIOAT_Complete.yaml"
   ],
   "Data Connectors": [
-    "Data Connectors/TrendAIVisionOneWorkbench_ccp/connectorDefinition.json",
-    "Data Connectors/TrendAIVisionOneOAT_ccp/connectorDefinition.json"
+    "Data Connectors/TrendAIVisionOneWorkbench_ccp/TrendAIVisionOneWorkbench_ConnectorDefinition.json",
+    "Data Connectors/TrendAIVisionOneOAT_ccp/TrendAIVisionOneOAT_ConnectorDefinition.json"
   ],
   "Metadata": "Data/Solution_TrendAIVisionOne.json",
   "BasePath": "https://raw.githubusercontent.com/Azure/Azure-Sentinel/master/Solutions/TrendAI%20Vision%20One(Via%20CCF)",

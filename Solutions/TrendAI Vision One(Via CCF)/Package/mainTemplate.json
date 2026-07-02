@@ -8,7 +8,6 @@
   "parameters": {
     "location": {
       "type": "string",
-      "minLength": 1,
       "defaultValue": "[resourceGroup().location]",
       "metadata": {
         "description": "Location for all resources."
@@ -28,13 +27,6 @@
         "description": "Workspace name for Log Analytics where Microsoft Sentinel is setup"
       }
     },
-    "workbook1-name": {
-      "type": "string",
-      "defaultValue": "TrendAI Vision One - Workbench Overview",
-      "metadata": {
-        "description": "Name for the workbook"
-      }
-    },
     "excludeThirdPartyOat": {
       "type": "bool",
       "defaultValue": true,
@@ -46,7 +38,6 @@
   "variables": {
     "email": "xdrfeedback@trendmicro.com",
     "_email": "[variables('email')]",
-    "_solutionName": "TrendAIVisionOne",
     "_solutionVersion": "2.0.0",
     "solutionId": "trendmicro.trend-micro-vision-one-sentinel-solution",
     "_solutionId": "[variables('solutionId')]",
@@ -65,19 +56,15 @@
     "parserName2": "TrendAIOAT_Complete",
     "_solutioncontentProductId": "[concat(take(variables('_solutionId'),50),'-','sl','-', uniqueString(concat(variables('_solutionId'),'-','Solution','-',variables('_solutionId'),'-', variables('_solutionVersion'))))]",
     "dataConnectorCCPVersion": "1.0.0",
-    "_workbenchConnectorContentId": "[variables('workbenchConnectorId')]",
-    "_oatConnectorContentId": "[variables('oatConnectorId')]",
     "_workbenchConnectionsContentId": "[concat(variables('workbenchConnectorId'), 'Connections')]",
     "_oatConnectionsContentId": "[concat(variables('oatConnectorId'), 'Connections')]",
-    "workbenchConnectorTemplateName": "[concat(parameters('workspace'),'-dc-',uniquestring(variables('_workbenchConnectorContentId')))]",
-    "oatConnectorTemplateName": "[concat(parameters('workspace'),'-dc-',uniquestring(variables('_oatConnectorContentId')))]",
     "workbenchConnectionsTemplateName": "[concat(parameters('workspace'),'-dc-',uniquestring(variables('_workbenchConnectionsContentId')))]",
     "oatConnectionsTemplateName": "[concat(parameters('workspace'),'-dc-',uniquestring(variables('_oatConnectionsContentId')))]"
   },
   "resources": [
     {
       "type": "Microsoft.Insights/dataCollectionEndpoints",
-      "apiVersion": "2022-06-01",
+      "apiVersion": "2024-03-11",
       "name": "[variables('dceName')]",
       "location": "[parameters('workspace-location')]",
       "properties": {
@@ -88,7 +75,7 @@
     },
     {
       "type": "Microsoft.OperationalInsights/workspaces/tables",
-      "apiVersion": "2022-10-01",
+      "apiVersion": "2025-02-01",
       "name": "[concat(parameters('workspace'), '/', variables('workbenchTableName'))]",
       "properties": {
         "schema": {
@@ -156,7 +143,7 @@
     },
     {
       "type": "Microsoft.OperationalInsights/workspaces/tables",
-      "apiVersion": "2022-10-01",
+      "apiVersion": "2025-02-01",
       "name": "[concat(parameters('workspace'), '/', variables('oatTableName'))]",
       "properties": {
         "schema": {
@@ -237,7 +224,7 @@
     },
     {
       "type": "Microsoft.Insights/dataCollectionRules",
-      "apiVersion": "2022-06-01",
+      "apiVersion": "2024-03-11",
       "name": "[variables('workbenchDcrName')]",
       "location": "[parameters('workspace-location')]",
       "dependsOn": [
@@ -287,7 +274,7 @@
     },
     {
       "type": "Microsoft.Insights/dataCollectionRules",
-      "apiVersion": "2022-06-01",
+      "apiVersion": "2024-03-11",
       "name": "[variables('oatDcrName')]",
       "location": "[parameters('workspace-location')]",
       "dependsOn": [
@@ -363,8 +350,8 @@
             "dcrConfig": {
               "type": "object",
               "defaultValue": {
-                "dataCollectionEndpoint": "[reference(resourceId('Microsoft.Insights/dataCollectionEndpoints', variables('dceName')), '2022-06-01').logsIngestion.endpoint]",
-                "dataCollectionRuleImmutableId": "[reference(resourceId('Microsoft.Insights/dataCollectionRules', variables('workbenchDcrName')), '2022-06-01').immutableId]"
+                "dataCollectionEndpoint": "[reference(resourceId('Microsoft.Insights/dataCollectionEndpoints', variables('dceName')), '2024-03-11').logsIngestion.endpoint]",
+                "dataCollectionRuleImmutableId": "[reference(resourceId('Microsoft.Insights/dataCollectionRules', variables('workbenchDcrName')), '2024-03-11').immutableId]"
               }
             },
             "apiDomain": {"type": "string", "minLength": 1, "defaultValue": "api.xdr.trendmicro.com"},
@@ -450,8 +437,8 @@
             "dcrConfig": {
               "type": "object",
               "defaultValue": {
-                "dataCollectionEndpoint": "[reference(resourceId('Microsoft.Insights/dataCollectionEndpoints', variables('dceName')), '2022-06-01').logsIngestion.endpoint]",
-                "dataCollectionRuleImmutableId": "[reference(resourceId('Microsoft.Insights/dataCollectionRules', variables('oatDcrName')), '2022-06-01').immutableId]"
+                "dataCollectionEndpoint": "[reference(resourceId('Microsoft.Insights/dataCollectionEndpoints', variables('dceName')), '2024-03-11').logsIngestion.endpoint]",
+                "dataCollectionRuleImmutableId": "[reference(resourceId('Microsoft.Insights/dataCollectionRules', variables('oatDcrName')), '2024-03-11').immutableId]"
               }
             },
             "apiDomain": {"type": "string", "minLength": 1, "defaultValue": "api.xdr.trendmicro.com"},
@@ -624,7 +611,7 @@
     },
     {
       "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
-      "apiVersion": "2022-10-01",
+      "apiVersion": "2025-02-01",
       "name": "[concat(parameters('workspace'), '/', variables('parserName1'))]",
       "dependsOn": [
         "[resourceId('Microsoft.OperationalInsights/workspaces/tables', parameters('workspace'), variables('workbenchTableName'))]"
@@ -641,7 +628,7 @@
     },
     {
       "type": "Microsoft.OperationalInsights/workspaces/savedSearches",
-      "apiVersion": "2022-10-01",
+      "apiVersion": "2025-02-01",
       "name": "[concat(parameters('workspace'), '/', variables('parserName2'))]",
       "dependsOn": [
         "[resourceId('Microsoft.OperationalInsights/workspaces/tables', parameters('workspace'), variables('oatTableName'))]"
@@ -703,6 +690,10 @@
     }
   ],
   "outputs": {
+    "location": {
+      "type": "string",
+      "value": "[parameters('location')]"
+    },
     "dceEndpoint": {
       "type": "string",
       "value": "[reference(resourceId('Microsoft.Insights/dataCollectionEndpoints', variables('dceName'))).logsIngestion.endpoint]"
