@@ -6,7 +6,7 @@
     "config": {
       "isWizard": false,
       "basics": {
-        "description": "<img src=\"https://raw.githubusercontent.com/trendmicro/TrendAI_Sentinel_public_data_Connector/main/assets/trendai-logo.svg\" width=\"75px\" height=\"75px\">\n\n**Note:** Please refer to the following before installing the solution: \n\n• Review the solution [Release Notes](https://github.com/trendmicro/TrendAI_Sentinel_public_data_Connector/releases)\n\n• There may be [known issues](https://github.com/trendmicro/TrendAI_Sentinel_public_data_Connector/issues) pertaining to this Solution.\n\nThe [TrendAI Vision One](https://www.trendmicro.com/en_us/business/products/detection-response/xdr.html) solution for Microsoft Sentinel provides two data connectors that ingest security data from the TrendAI Vision One platform using the Codeless Connector Framework (CCF):\n\n- **Workbench Alerts** – Security incidents, investigations, and alerts with IOC extraction\n- **OAT Detections** – MITRE ATT&CK mapped detections with full process trees\n\nThis solution also includes KQL parser functions, an analytic rule, and a workbook dashboard for Workbench Alerts.\n\n**Data Connectors:** 2, **Parsers:** 2, **Workbooks:** 1, **Analytic Rules:** 1\n\n[Learn more about Microsoft Sentinel](https://aka.ms/azuresentinel) | [Learn more about Solutions](https://aka.ms/azuresentinelsolutionsdoc)",
+        "description": "<img src=\"https://raw.githubusercontent.com/trendmicro/TrendAI_Sentinel_public_data_Connector/main/assets/trendai-logo.svg\" width=\"75px\" height=\"75px\">\n\n**Note:** Please refer to the following before installing the solution: \n\n• Review the solution [Release Notes](https://github.com/Azure/Azure-Sentinel/tree/master/Solutions/TrendAI%20Vision%20One%28Via%20CCF%29/ReleaseNotes.md)\n\n • There may be [known issues](https://aka.ms/sentinelsolutionsknownissues) pertaining to this Solution, please refer to them before installing.\n\nThe [TrendAI Vision One](https://www.trendmicro.com/en_us/business/products/detection-response/xdr.html) solution for Microsoft Sentinel provides two data connectors that ingest security data from the TrendAI Vision One platform using the Codeless Connector Framework (CCF):\n\n- **Workbench Alerts** – Security incidents, investigations, and alerts with IOC extraction\n- **OAT Detections** – MITRE ATT&CK mapped detections with full process trees\n\nThis solution also includes KQL parser functions, an analytic rule, and a workbook dashboard for Workbench Alerts.\n\n**Data Connectors:** 2, **Parsers:** 2, **Workbooks:** 1, **Analytic Rules:** 1\n\n[Learn more about Microsoft Sentinel](https://aka.ms/azuresentinel) | [Learn more about Solutions](https://aka.ms/azuresentinelsolutionsdoc)",
         "subscription": {
           "resourceProviders": [
             "Microsoft.OperationsManagement/solutions",
@@ -17,7 +17,7 @@
         },
         "location": {
           "metadata": {
-            "hidden": "Hiding location, we get it from workspace"
+            "hidden": "Hiding location, we get it from the log analytics workspace"
           },
           "visible": false
         },
@@ -60,7 +60,24 @@
             "name": "dataconnectors1-text",
             "type": "Microsoft.Common.TextBlock",
             "options": {
-              "text": "This Solution installs the following data connectors. You can manage these data connectors in the Configuration > Data Connectors blade after the solution is installed."
+              "text": "This Solution installs the data connector for TrendAI Vision One™ - Workbench Alerts (via Codeless Connector Framework). You can get TrendAI Vision One™ - Workbench Alerts (via Codeless Connector Framework) data in your Microsoft Sentinel workspace. After installing the solution, configure and enable this data connector by following guidance in Manage solution view."
+            }
+          },
+          {
+            "name": "dataconnectors-link1",
+            "type": "Microsoft.Common.TextBlock",
+            "options": {
+              "link": {
+                "label": "Learn more about connecting data sources",
+                "uri": "https://docs.microsoft.com/azure/sentinel/connect-data-sources"
+              }
+            }
+          },
+          {
+            "name": "dataconnectors2-text",
+            "type": "Microsoft.Common.TextBlock",
+            "options": {
+              "text": "This Solution installs the data connector for TrendAI Vision One™ - OAT Detections (via Codeless Connector Framework). You can get TrendAI Vision One™ - OAT Detections (via Codeless Connector Framework) data in your Microsoft Sentinel workspace. After installing the solution, configure and enable this data connector by following guidance in Manage solution view."
             }
           },
           {
@@ -72,20 +89,6 @@
                 "uri": "https://docs.microsoft.com/azure/sentinel/connect-data-sources"
               }
             }
-          },
-          {
-            "name": "dataconnectors-parser-text",
-            "type": "Microsoft.Common.TextBlock",
-            "options": {
-              "text": "The Solution installs 2 data connectors:\n\n1. **TrendAI Vision One - Workbench Alerts** - Ingests security alerts from the Workbench API with IOC extraction and entity mapping.\n\n2. **TrendAI Vision One - OAT Detections** - Ingests Observed Attack Techniques with full process trees and MITRE ATT&CK mappings."
-            }
-          },
-          {
-            "name": "excludeThirdPartyOat",
-            "type": "Microsoft.Common.CheckBox",
-            "label": "Exclude third-party OAT detections (productCode == 'tlc')",
-            "defaultValue": true,
-            "toolTip": "When checked, the DCR transform drops rows where productCode == 'tlc' (third-party linked sources). Uncheck to ingest everything."
           }
         ]
       },
@@ -118,13 +121,13 @@
           {
             "name": "workbook1",
             "type": "Microsoft.Common.Section",
-            "label": "TrendAI Vision One - Workbench Overview",
+            "label": null,
             "elements": [
               {
                 "name": "workbook1-text",
                 "type": "Microsoft.Common.TextBlock",
                 "options": {
-                  "text": "Visualize Workbench alerts over time, by severity, by detection model, and top affected hosts."
+                  "text": null
                 }
               }
             ]
@@ -175,10 +178,9 @@
       }
     ],
     "outputs": {
+      "workspace-location": "[first(map(filter(basics('getLAWorkspace').value, (filter) => and(contains(toLower(filter.id), toLower(resourceGroup().name)),equals(filter.name,basics('workspace')))), (item) => item.location))]",
       "location": "[location()]",
-      "workspace-location": "[first(map(filter(basics('getLAWorkspace').value, (filter) => equals(filter.name,basics('workspace'))), (item) => item.location))]",
-      "workspace": "[basics('workspace')]",
-      "excludeThirdPartyOat": "[steps('dataconnectors').excludeThirdPartyOat]"
+      "workspace": "[basics('workspace')]"
     }
   }
 }
