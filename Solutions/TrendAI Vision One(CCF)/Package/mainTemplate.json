@@ -30,7 +30,7 @@
     },
     "workbook1-name": {
       "type": "string",
-      "defaultValue": null,
+      "defaultValue": "TrendAI Vision One Workbench Overview",
       "minLength": 1,
       "metadata": {
         "description": "Name for the workbook"
@@ -1793,7 +1793,7 @@
                         {
                           "type": "Dropdown",
                           "parameters": {
-                            "label": "API Domain (Select your Vision One region)",
+                            "label": "API Domain (Select your region)",
                             "name": "apiDomain",
                             "required": true,
                             "isMultiSelect": false,
@@ -1918,7 +1918,7 @@
               "apiVersion": "2022-06-01",
               "type": "Microsoft.Insights/dataCollectionRules",
               "location": "[parameters('workspace-location')]",
-              "kind": "[variables('blanks')]",
+              "kind": null,
               "properties": {
                 "dataCollectionEndpointId": "[concat('/subscriptions/', parameters('subscription'), '/resourceGroups/', parameters('resourceGroupName'), '/providers/Microsoft.Insights/dataCollectionEndpoints/', parameters('workspace'))]",
                 "streamDeclarations": {
@@ -3052,7 +3052,7 @@
                 {
                   "type": "Dropdown",
                   "parameters": {
-                    "label": "API Domain (Select your Vision One region)",
+                    "label": "API Domain (Select your region)",
                     "name": "apiDomain",
                     "required": true,
                     "isMultiSelect": false,
@@ -3414,7 +3414,7 @@
                         {
                           "type": "Dropdown",
                           "parameters": {
-                            "label": "API Domain (Select your Vision One region)",
+                            "label": "API Domain (Select your region)",
                             "name": "apiDomain",
                             "required": true,
                             "isMultiSelect": false,
@@ -3463,7 +3463,8 @@
                                 "key": "api.za.xdr.trendmicro.com",
                                 "text": "South Africa (api.za.xdr.trendmicro.com)"
                               }
-                            ]
+                            ],
+                            "placeholder": "Select your Vision One region"
                           }
                         },
                         {
@@ -3496,14 +3497,15 @@
                             "options": [
                               {
                                 "key": "true",
-                                "text": "Yes - Exclude third-party detections"
+                                "text": "Yes - Exclude third-party detections (Recommended)"
                               },
                               {
                                 "key": "false",
                                 "text": "No - Include all detections"
                               }
                             ],
-                            "defaultValue": "true"
+                            "placeholder": "Yes - Exclude third-party detections",
+                            "defaultValue": ["true"]
                           }
                         },
                         {
@@ -3559,7 +3561,7 @@
               "apiVersion": "2022-06-01",
               "type": "Microsoft.Insights/dataCollectionRules",
               "location": "[parameters('workspace-location')]",
-              "kind": "[variables('blanks')]",
+              "kind": null,
               "properties": {
                 "dataCollectionEndpointId": "[concat('/subscriptions/', parameters('subscription'), '/resourceGroups/', parameters('resourceGroupName'), '/providers/Microsoft.Insights/dataCollectionEndpoints/', parameters('workspace'))]",
                 "streamDeclarations": {
@@ -4384,7 +4386,7 @@
                 {
                   "type": "Dropdown",
                   "parameters": {
-                    "label": "API Domain (Select your Vision One region)",
+                    "label": "API Domain (Select your region)",
                     "name": "apiDomain",
                     "required": true,
                     "isMultiSelect": false,
@@ -4433,7 +4435,8 @@
                         "key": "api.za.xdr.trendmicro.com",
                         "text": "South Africa (api.za.xdr.trendmicro.com)"
                       }
-                    ]
+                    ],
+                    "placeholder": "Select your Vision One region"
                   }
                 },
                 {
@@ -4466,14 +4469,15 @@
                     "options": [
                       {
                         "key": "true",
-                        "text": "Yes - Exclude third-party detections"
+                        "text": "Yes - Exclude third-party detections (Recommended)"
                       },
                       {
                         "key": "false",
                         "text": "No - Include all detections"
                       }
                     ],
-                    "defaultValue": "true"
+                    "placeholder": "Yes - Exclude third-party detections",
+                    "defaultValue": ["true"]
                   }
                 },
                 {

@@ -76,7 +76,7 @@
             {
               "type": "Dropdown",
               "parameters": {
-                "label": "API Domain (Select your Vision One region)",
+                "label": "API Domain (Select your region)",
                 "name": "apiDomain",
                 "required": true,
                 "isMultiSelect": false,
@@ -92,7 +92,8 @@
                   { "key": "api.uk.xdr.trendmicro.com", "text": "United Kingdom (api.uk.xdr.trendmicro.com)" },
                   { "key": "api.ca.xdr.trendmicro.com", "text": "Canada (api.ca.xdr.trendmicro.com)" },
                   { "key": "api.za.xdr.trendmicro.com", "text": "South Africa (api.za.xdr.trendmicro.com)" }
-                ]
+                ],
+                "placeholder": "Select your Vision One region"
               }
             },
             {
@@ -123,10 +124,11 @@
                 "required": true,
                 "isMultiSelect": false,
                 "options": [
-                  { "key": "true", "text": "Yes - Exclude third-party detections" },
+                  { "key": "true", "text": "Yes - Exclude third-party detections (Recommended)" },
                   { "key": "false", "text": "No - Include all detections" }
                 ],
-                "defaultValue": "true"
+                "placeholder": "Yes - Exclude third-party detections",
+                "defaultValue": ["true"]
               }
             },
             {
