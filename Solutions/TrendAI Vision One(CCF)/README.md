@@ -63,7 +63,7 @@ Determine the API domain based on your TrendAI Vision One tenant region:
 | US | `api.xdr.trendmicro.com` |
 | EU | `api.eu.xdr.trendmicro.com` |
 | SG | `api.sg.xdr.trendmicro.com` |
-| JP | `api.xdr.trendmicro.co.jp` / `api.jp.xdr.trendmicro.co.jp` |
+| JP | `api.xdr.trendmicro.co.jp` |
 | AU | `api.au.xdr.trendmicro.com` |
 | IN | `api.in.xdr.trendmicro.com` |
 | MEA | `api.mea.xdr.trendmicro.com` |
@@ -288,8 +288,7 @@ For issues and support:
 
 | Version | Date | Description |
 |---------|------|-------------|
-| 3.1.1 | 2026-07 | Fixed ARM template bracket escaping, added token rotation warning, optimized workbook queries |
-| 3.0.0 | 2026-07 | Initial release with CCF-based connectors, dropdown selectors for API domain and third-party exclusion, TMV1-Filter support, MITRE ATT&CK mappings |
+| 3.0.0 | 2026-08 | Initial release with CCF-based connectors, dropdown selectors for API domain and third-party exclusion, TMV1-Filter support, MITRE ATT&CK mappings. Fixed ARM template bracket escaping, added token rotation warning, optimized workbook queries. |
 
 ---
 
