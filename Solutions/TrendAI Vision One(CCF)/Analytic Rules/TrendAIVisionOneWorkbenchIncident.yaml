@@ -89,7 +89,7 @@ alertDetailsOverride:
   alertDescriptionFormat: '{{description_s}}'
   alertSeverityColumnName: Severity
 customDetails:
-  XDRCustomerID: xdrCustomerId_g
+  XDRCustomerID: xdrCustomerID_g
   WorkbenchID: workbenchId_s
   WorkbenchName: workbenchName_s
   WorkbenchLink: workbenchLink_s
