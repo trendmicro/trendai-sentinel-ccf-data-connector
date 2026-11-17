@@ -1,57 +1,21 @@
-# Trend Vision One - Microsoft Sentinel Data Connectors
+# TrendAI Vision One - Microsoft Sentinel Data Connectors
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
-**Workbench Alerts** &nbsp; [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ftrendmicro%2Ftrendai-sentinel-ccf-data-connector%2Fmain%2Ftemplates%2Fworkbench%2FmainTemplate.json/createUIDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2Ftrendmicro%2Ftrendai-sentinel-ccf-data-connector%2Fmain%2Ftemplates%2Fworkbench%2FcreateUiDefinition.json) [![Deploy to Azure US Gov](https://aka.ms/deploytoazuregovbutton)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ftrendmicro%2Ftrendai-sentinel-ccf-data-connector%2Fmain%2Ftemplates%2Fworkbench%2FmainTemplate.json/createUIDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2Ftrendmicro%2Ftrendai-sentinel-ccf-data-connector%2Fmain%2Ftemplates%2Fworkbench%2FcreateUiDefinition.json)
+**TrendAI Vision One (Workbench Alerts + OAT Detections)** &nbsp; [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ftrendmicro%2Ftrendai-sentinel-ccf-data-connector%2Fmain%2FSolutions%2FTrendAI%2520Vision%2520One%2528CCF%2529%2FPackage%2FmainTemplate.json/createUIDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2Ftrendmicro%2Ftrendai-sentinel-ccf-data-connector%2Fmain%2FSolutions%2FTrendAI%2520Vision%2520One%2528CCF%2529%2FPackage%2FcreateUiDefinition.json) [![Deploy to Azure US Gov](https://aka.ms/deploytoazuregovbutton)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ftrendmicro%2Ftrendai-sentinel-ccf-data-connector%2Fmain%2FSolutions%2FTrendAI%2520Vision%2520One%2528CCF%2529%2FPackage%2FmainTemplate.json/createUIDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2Ftrendmicro%2Ftrendai-sentinel-ccf-data-connector%2Fmain%2FSolutions%2FTrendAI%2520Vision%2520One%2528CCF%2529%2FPackage%2FcreateUiDefinition.json)
 
-**OAT (Observed Attack Techniques)** &nbsp; [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ftrendmicro%2Ftrendai-sentinel-ccf-data-connector%2Fmain%2Ftemplates%2Foat%2FmainTemplate.json/createUIDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2Ftrendmicro%2Ftrendai-sentinel-ccf-data-connector%2Fmain%2Ftemplates%2Foat%2FcreateUiDefinition.json) [![Deploy to Azure US Gov](https://aka.ms/deploytoazuregovbutton)](https://portal.azure.us/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ftrendmicro%2Ftrendai-sentinel-ccf-data-connector%2Fmain%2Ftemplates%2Foat%2FmainTemplate.json/createUIDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2Ftrendmicro%2Ftrendai-sentinel-ccf-data-connector%2Fmain%2Ftemplates%2Foat%2FcreateUiDefinition.json)
+> **Note:** this repository is not yet public. The link above will start working once the repo's visibility is flipped to public (see `.github/GO_LIVE_CHECKLIST.md`). Until then, deploy via the pre-built zip at [`Solutions/TrendAI Vision One(CCF)/Package/`](<Solutions/TrendAI Vision One(CCF)/Package/>) (Azure Portal → "Deploy a custom template" → "Build your own template" → upload) or install from **Microsoft Sentinel Content Hub** once the solution is published there.
 
-### Test Deploy (Azure Storage-hosted, while repo is private)
-
-Templates served from a public Azure Blob container so the portal can fetch them without GitHub auth. Remove once the repo goes public.
-
-**Before clicking the buttons below, publish the latest templates to the blob container** so the deploy URLs serve current code.
-
-**One-time setup** (per developer):
-
-```bash
-# 1. Install Azure CLI if you don't have it
-#    macOS:  brew install azure-cli
-#    Linux:  https://learn.microsoft.com/cli/azure/install-azure-cli-linux
-
-# 2. Log in and select the subscription that owns the trendaiccf45 storage account
-az login
-az account set --subscription "<subscription-name-or-id>"
-```
-
-Required access: at least **Contributor** (or **Storage Account Key Operator Service Role**) on the `trendaiccf45` storage account, so `az storage account keys list` works. If you only have data-plane access, use a SAS token instead — see [scripts/publish-templates.sh](scripts/publish-templates.sh).
-
-**Each time you change templates**, publish them:
-
-```bash
-export AZURE_STORAGE_KEY="$(az storage account keys list \
-  --account-name trendaiccf45 \
-  --query '[0].value' -o tsv)"
-
-./scripts/publish-templates.sh
-```
-
-The script stages `templates/`, rewrites the nested `baseUrl` from the GitHub raw URL to the blob URL, and uploads to `trendaiccf45/arm-templates/`.
-
-**Workbench Alerts** &nbsp; [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Ftrendaiccf45.blob.core.windows.net%2Farm-templates%2Fworkbench%2FmainTemplate.json/createUIDefinitionUri/https%3A%2F%2Ftrendaiccf45.blob.core.windows.net%2Farm-templates%2Fworkbench%2FcreateUiDefinition.json)
-
-**OAT (Observed Attack Techniques)** &nbsp; [![Deploy to Azure](https://aka.ms/deploytoazurebutton)](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Ftrendaiccf45.blob.core.windows.net%2Farm-templates%2Foat%2FmainTemplate.json/createUIDefinitionUri/https%3A%2F%2Ftrendaiccf45.blob.core.windows.net%2Farm-templates%2Foat%2FcreateUiDefinition.json)
-
-Production-ready data connectors for ingesting **Trend Vision One** security data into **Microsoft Sentinel** using Azure's Codeless Connector Platform (CCP).
+Production-ready data connector solution for ingesting **TrendAI Vision One** security data into **Microsoft Sentinel** using Azure's Codeless Connector Platform (CCP). One deployment installs both connectors below, plus the shared parsers, analytic rule, and workbook.
 
 ## 🚀 Quick Deploy
 
-Choose the connector you need and click the Deploy button above:
+Click the Deploy button above to install the full solution in one pass:
 
-| Connector | Description | Data Volume | Deploy |
-|-----------|-------------|-------------|--------|
-| **Workbench Alerts** | Security incidents, investigations, and alerts with IOC extraction | Medium | [Deploy to Azure](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ftrendmicro%2Ftrendai-sentinel-ccf-data-connector%2Fmain%2Ftemplates%2Fworkbench%2FmainTemplate.json/createUIDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2Ftrendmicro%2Ftrendai-sentinel-ccf-data-connector%2Fmain%2Ftemplates%2Fworkbench%2FcreateUiDefinition.json) |
-| **OAT (Observed Attack Techniques)** | MITRE ATT&CK mapped detections with full process trees | High | [Deploy to Azure](https://portal.azure.com/#create/Microsoft.Template/uri/https%3A%2F%2Fraw.githubusercontent.com%2Ftrendmicro%2Ftrendai-sentinel-ccf-data-connector%2Fmain%2Ftemplates%2Foat%2FmainTemplate.json/createUIDefinitionUri/https%3A%2F%2Fraw.githubusercontent.com%2Ftrendmicro%2Ftrendai-sentinel-ccf-data-connector%2Fmain%2Ftemplates%2Foat%2FcreateUiDefinition.json) |
+| Connector | Description | Data Volume |
+|-----------|-------------|-------------|
+| **Workbench Alerts** | Security incidents, investigations, and alerts with IOC extraction | Medium |
+| **OAT (Observed Attack Techniques)** | MITRE ATT&CK mapped detections with full process trees | High |
 
 ## 📋 Prerequisites
 
@@ -59,15 +23,15 @@ Before deploying, ensure you have:
 
 - ✅ **Azure Subscription** with Owner or Contributor role
 - ✅ **Log Analytics Workspace** with Microsoft Sentinel enabled (or workspace will be enabled during deployment)
-- ✅ **Trend Vision One API Token** with 'SIEM' role permissions
+- ✅ **TrendAI Vision One API Token** with view permissions for Workbench and/or Observed Attack Techniques
 
 ### Getting Your API Token
 
-1. Log in to **Trend Vision One Console**
+1. Log in to **TrendAI Vision One Console**
 2. Navigate to **Administration → API Keys**
-3. Click **Generate New API Key**
-4. Select role: **SIEM** or **Workbench**
-5. Copy the token (you'll need it after deployment)
+3. Click **Add API Key**
+4. Select a role with permissions: **Workbench (View)** and/or **Observed Attack Techniques (View)**
+5. Copy the token immediately — it will not be shown again
 
 ## 🎯 Deployment Process
 
@@ -81,19 +45,19 @@ The custom deployment UI will appear with:
 - **Subscription** - Select your Azure subscription
 - **Resource Group** - Select or create new
 - **Workspace** - Dropdown of your Sentinel workspaces
-- **Region** - Your Trend Vision One region (US, UK, SG, CA, JP)
+- **Region** - Your TrendAI Vision One region (US, EU, SG, JP, AU, IN, MEA, UK, CA, ZA — see [Supported Regions](#-supported-regions))
 
 ### Step 3: Deploy Resources
 
 Azure will automatically deploy:
 1. Microsoft Sentinel solution (if not enabled)
-2. Custom log table (TrendMicro_XDR_WORKBENCH_CL or TrendMicro_XDR_OAT_CL)
+2. Custom log tables (`TrendAI_XDR_WORKBENCH_V2_CL` and `TrendAI_XDR_OAT_V2_CL`)
 3. Data Collection Endpoint (DCE)
-4. Data Collection Rule (DCR) with data transformation
-5. Connector definition in Sentinel portal
-6. Parser function (Workbench: `TrendMicroWorkbench_Complete`, OAT: `TrendMicroOAT_Complete`)
-7. Analytic rule template (disabled by default)
-8. Workbook dashboard for monitoring
+4. Data Collection Rules (DCR) with data transformation
+5. Connector definitions in Sentinel portal (Workbench Alerts, OAT Detections)
+6. Parser functions (`TrendAIWorkbench_Complete`, `TrendAIOAT_Complete`)
+7. Analytic rule template (disabled by default, Workbench only)
+8. Workbook dashboard for monitoring (Workbench only)
 
 ⏱️ **Deployment time**: 3-5 minutes
 
@@ -102,54 +66,48 @@ Azure will automatically deploy:
 After deployment completes:
 
 1. Navigate to **Microsoft Sentinel → Data connectors**
-2. Search for **"Trend Vision One - Workbench"** or **"Trend Vision One - OAT"**
+2. Search for **"TrendAI Vision One - Workbench Alerts"** or **"TrendAI Vision One - OAT Detections"**
 3. Click **Open connector page**
-4. Enter your API token (include `Bearer ` prefix)
+4. Enter your API token and API Domain (e.g. `api.xdr.trendmicro.com`)
 5. Click **Connect**
 
 🎉 **Data will start flowing in 5-10 minutes!**
 
-### Step 5: Enable Analytic Rules (Optional)
+### Step 5: Enable the Analytic Rule (Optional)
 
-Each connector includes an **Analytic Rule** that automatically creates incidents:
+The solution includes one **Analytic Rule**, for Workbench Alerts, that automatically creates incidents:
 
 1. Navigate to **Microsoft Sentinel → Analytics**
-2. Search for **"Trend Vision One"**
-3. Find the rule:
-   - **Workbench**: "Create Incident for Workbench Alerts"
-   - **OAT**: "Create Incident for High-Risk OAT Detections"
+2. Search for **"TrendAI Vision One"**
+3. Find the rule: **"TrendAI Vision One - Create Incident for Workbench Alerts"**
 4. Click the rule → **Edit** → **Enable** → **Save**
 
 **What it does:**
-- Runs every 5 minutes
-- Creates incidents with mapped entities (Account, File, Process, IP, Host)
-- Groups related alerts by WorkbenchID/EventID
+- Creates incidents from Workbench alerts with mapped entities
+- Includes MITRE ATT&CK mappings
 - Adds custom details for investigations
 
-### Step 6: View Dashboards (Optional)
+### Step 6: View the Dashboard (Optional)
 
-Each connector includes a **Workbook** dashboard:
+The solution includes one **Workbook** dashboard, for Workbench Alerts:
 
 1. Navigate to **Microsoft Sentinel → Workbooks**
 2. Click **My workbooks** tab
-3. Find:
-   - **Workbench**: "TrendVisionOneWorkbenchOverview"
-   - **OAT**: "TrendVisionOneOATOverview"
+3. Find: **"TrendAIVisionOneWorkbenchOverview"**
 4. Click **View saved workbook**
 
 **Visualizations include:**
-- Alert/Detection trends over time
-- Severity/Risk level distribution
+- Alert trends over time
+- Severity distribution
 - Top affected hosts/endpoints
-- MITRE ATT&CK tactics and techniques (OAT only)
-- Detection model usage (Workbench only)
+- Investigation status breakdown
 
 ## 📊 Verify Data Ingestion
 
 ### Workbench Alerts
 
 ```kql
-TrendMicro_XDR_WORKBENCH_CL
+TrendAI_XDR_WORKBENCH_V2_CL
 | where TimeGenerated > ago(1h)
 | project TimeGenerated, workbenchId_s, severity_s, workbenchName_s
 | take 10
@@ -158,52 +116,48 @@ TrendMicro_XDR_WORKBENCH_CL
 ### OAT Detections
 
 ```kql
-TrendMicro_XDR_OAT_CL
+TrendAI_XDR_OAT_V2_CL
 | where TimeGenerated > ago(1h)
-| project TimeGenerated, entityType_s, detail_endpointHostName_s, detail_filterRiskLevel_s
+| project TimeGenerated, detail_endpointHostName_s, detail_filterRiskLevel_s, detail_ruleName_s
 | take 10
 ```
 
 ## 🏗️ Architecture
 
-This solution follows Microsoft's recommended **modular architecture** pattern:
+This solution follows Microsoft's standard **Sentinel solution package** pattern: a single `mainTemplate.json` embeds every resource as ARM content templates, deployed in one pass.
 
 ```
-mainTemplate.json (Orchestrator)
-  ├─> sentinel-solution.json      # Enables Sentinel
-  ├─> table.json                  # Creates custom table
-  ├─> dce.json                    # Data Collection Endpoint
-  ├─> dcr.json                    # Data Collection Rule (transforms data)
-  ├─> connector-definition.json   # Connector UI in portal
-  ├─> parser-function.json        # KQL parser (Workbench + OAT; universal old+new)
-  ├─> analytic-rule.json          # Incident creation rule (disabled)
-  └─> workbook.json               # Monitoring dashboard
+mainTemplate.json
+  ├─> data connector definitions (Workbench Alerts + OAT Detections)
+  ├─> custom tables, DCE, DCRs (ingestion-time transforms)
+  ├─> parser functions (TrendAIWorkbench_Complete, TrendAIOAT_Complete)
+  ├─> analytic rule (Workbench incident creation)
+  └─> workbook (Workbench Overview dashboard)
 ```
 
 **Benefits:**
 - ✅ Single-click deployment via Azure Portal
-- ✅ Each component can be updated independently
+- ✅ Matches the Microsoft Sentinel Content Hub packaging format
 - ✅ Easy to troubleshoot and maintain
-- ✅ Follows Microsoft Sentinel best practices
 
 ## 📖 Data Schemas
 
-### Workbench Alerts (56 columns)
+### Workbench Alerts (`TrendAI_XDR_WORKBENCH_V2_CL`, 56 columns)
 
 | Category | Fields |
 |----------|--------|
 | **Core** | workbenchId_s, severity_s, investigationStatus_s, alertProvider_s |
 | **IOCs** | FileName_s, FileHashValue_s, IPAddress, DomainName_s, URL_s |
 | **Entities** | HostHostName_s, UserAccountName_s, MailboxPrimaryAddress_s |
-| **Dynamic** | indicators, entities, matchedRules (for advanced parsing) |
+| **Dynamic** | indicators, entities (for advanced parsing via `TrendAIWorkbench_Complete()`) |
 
-### OAT Detections (139 columns)
+### OAT Detections (`TrendAI_XDR_OAT_V2_CL`, 156 columns)
 
 | Category | Fields |
 |----------|--------|
-| **Core** | entityType_s, entityName_s, detectionTime_t |
-| **Endpoint** | endpoint_name_s, endpoint_guid_g, endpoint_ips_s |
-| **Process** | detail_processCmd_s, detail_processFileHashSha256_s, detail_processPid_d |
+| **Core** | detail_filterRiskLevel_s, detail_ruleName_s, detectionTime_t |
+| **Endpoint** | detail_endpointHostName_s |
+| **Process** | detail_processCmd_s, detail_processFileHashSha256_s |
 | **Parent** | detail_parentCmd_s, detail_parentFileHashSha256_s, detail_parentName_s |
 | **Network** | detail_src_s, detail_dst_s, detail_dpt_d, detail_spt_d |
 | **File** | detail_fileName_s, detail_fileHash_s, detail_filePathName_s |
@@ -213,21 +167,20 @@ mainTemplate.json (Orchestrator)
 ### Workbench: High Severity Alerts with File IOCs
 
 ```kql
-TrendMicroWorkbench_Complete()
+TrendAIWorkbench_Complete()
 | where severity_s in ("high", "critical")
 | where isnotempty(FileHashValue_s)
 | project TimeGenerated, workbenchName_s, FileName_s, FileHashValue_s, HostHostName_s
 ```
 
-### OAT: Credential Dumping Detection
+### OAT: High-Risk Detections with Process Details
 
 ```kql
-TrendMicro_XDR_OAT_CL
+TrendAI_XDR_OAT_V2_CL
 | where detail_filterRiskLevel_s == "high"
-| where detail_eventName_s contains "Credential"
-| project TimeGenerated, 
+| project TimeGenerated,
     Endpoint = detail_endpointHostName_s,
-    Process = detail_processName_s,
+    Rule = detail_ruleName_s,
     CommandLine = detail_processCmd_s,
     SHA256 = detail_processFileHashSha256_s
 ```
@@ -235,110 +188,83 @@ TrendMicro_XDR_OAT_CL
 ### OAT: Process Tree Analysis
 
 ```kql
-TrendMicro_XDR_OAT_CL
-| where isnotempty(detail_processName_s)
+TrendAI_XDR_OAT_V2_CL
+| where isnotempty(detail_processCmd_s)
 | project TimeGenerated,
     Endpoint = detail_endpointHostName_s,
-    Process = detail_processName_s,
-    Parent = detail_parentName_s,
-    CommandLine = detail_processCmd_s
+    CommandLine = detail_processCmd_s,
+    ParentCommandLine = detail_parentCmd_s,
+    ParentHash = detail_parentFileHashSha256_s
 ```
 
 ## 🌍 Supported Regions
 
-| Region | Value | API Endpoint |
-|--------|-------|--------------|
-| United States | `US` | api.xdr.trendmicro.com |
-| United Kingdom / EU | `UK` | api.uk.xdr.trendmicro.com |
-| Singapore / APAC | `SG` | api.sg.xdr.trendmicro.com |
-| Canada | `CA` | api.ca.xdr.trendmicro.com |
-| Japan | `JP` | api.jp.xdr.trendmicro.com |
+| Region | API Domain |
+|--------|------------|
+| United States | `api.xdr.trendmicro.com` |
+| Europe | `api.eu.xdr.trendmicro.com` |
+| Singapore | `api.sg.xdr.trendmicro.com` |
+| Japan | `api.xdr.trendmicro.co.jp` |
+| Australia | `api.au.xdr.trendmicro.com` |
+| India | `api.in.xdr.trendmicro.com` |
+| Middle East & Africa | `api.mea.xdr.trendmicro.com` |
+| United Kingdom | `api.uk.xdr.trendmicro.com` |
+| Canada | `api.ca.xdr.trendmicro.com` |
+| South Africa | `api.za.xdr.trendmicro.com` |
 
 ## 📁 Repository Structure
 
 ```
-templates/
-├── workbench/              # Workbench Alerts connector (modular)
-│   ├── mainTemplate.json
+Solutions/TrendAI Vision One(CCF)/
+├── Analytic Rules/         # Workbench incident creation rule
+├── Data/                   # Solution manifest & metadata
+├── Data Connectors/
+│   ├── TrendAIVisionOneWorkbench_ccp/   # Connector definition, DCR, table schema
+│   └── TrendAIVisionOneOAT_ccp/         # Connector definition, DCR, table schema
+├── Package/
+│   ├── mainTemplate.json   # Full ARM template (deployable unit)
 │   ├── createUiDefinition.json
-│   └── components/         # 6 modular components
-│
-├── oat/                    # OAT connector (modular)
-│   ├── mainTemplate.json
-│   ├── createUiDefinition.json
-│   └── components/         # modular components (incl. parser-function.json)
-│
-├── legacy/                 # Archived old templates
-└── ARCHITECTURE.md         # Detailed architecture documentation
+│   ├── package.sh          # Builds the deployable .zip from the above
+│   └── *.zip                # Packaged solution versions
+├── Parsers/                # TrendAIWorkbench_Complete, TrendAIOAT_Complete KQL functions
+├── Workbooks/               # Workbench Overview dashboard
+└── README.md                # Solution-level reference (install, params, schemas, troubleshooting)
 ```
 
 ## 🛠️ Advanced Deployment
 
 ### Using Azure CLI
 
-**Workbench:**
 ```bash
 az deployment group create \
   --resource-group <your-rg> \
-  --template-uri https://raw.githubusercontent.com/trendmicro/trendai-sentinel-ccf-data-connector/main/templates/workbench/mainTemplate.json \
-  --parameters workspace=<workspace-name> trendaiRegion=US
-```
-
-**OAT:**
-```bash
-az deployment group create \
-  --resource-group <your-rg> \
-  --template-uri https://raw.githubusercontent.com/trendmicro/trendai-sentinel-ccf-data-connector/main/templates/oat/mainTemplate.json \
-  --parameters workspace=<workspace-name> trendaiRegion=US
-```
-
-### Testing Individual Components
-
-Each component can be deployed independently for testing:
-
-```bash
-# Deploy just the custom table
-az deployment group create \
-  --template-file templates/workbench/components/table.json \
-  --parameters workspace=test-ws workspace-location=eastus
+  --template-uri "https://raw.githubusercontent.com/trendmicro/trendai-sentinel-ccf-data-connector/main/Solutions/TrendAI%20Vision%20One(CCF)/Package/mainTemplate.json" \
+  --parameters workspace=<workspace-name>
 ```
 
 ## 🔧 Troubleshooting
 
 ### No data after 10 minutes
 
-1. **Check API token**: Verify token has 'SIEM' role permissions
-2. **Check region**: Ensure correct Trend Vision One region selected
+1. **Check API token**: Verify token has the required view permissions and is not expired
+2. **Check region**: Ensure correct TrendAI Vision One API domain selected
 3. **Check connector status**: Sentinel → Data connectors → View connector health
 4. **Check DCR ingestion**: Azure Monitor → Data Collection Rules → View metrics
 
 ### Connection fails
 
-- Ensure API token includes `Bearer ` prefix
 - Regenerate API token if expired
+- Ensure no extra spaces when copying the token
 - Verify workspace has Sentinel enabled
 
 ### Missing IOC fields (Workbench)
 
-- Use the parser function: `TrendMicroWorkbench_Complete()`
+- Use the parser function: `TrendAIWorkbench_Complete()`
 - Parser extracts IOCs from dynamic columns automatically
 
 ## 📚 Documentation
 
-New here? Start with the **[docs/](docs/)** folder — detailed, plain-language guides written for every experience level:
-
-- [Docs home](docs/README.md) — the map of all guides
-- [Concepts — how it all fits together](docs/01-concepts.md) — what this is and *why* it's built this way
-- [Permissions you need (and why)](docs/02-permissions.md) — every Azure & Trend Vision One permission, explained
-- [Deploying the connector](docs/03-deployment.md) — step-by-step, portal and CLI
-- [Using the connector day to day](docs/04-using-the-connector.md) — verify data, query, alerts, dashboards, filters
-- [Migrating from the old connector](docs/05-migration.md) — move off the old Azure Function connector safely
-- [Troubleshooting](docs/06-troubleshooting.md) — fix the common problems
-
-Deeper / maintainer references:
-
-- [Architecture Details](templates/ARCHITECTURE.md) — deep dive into component design
-- [Internal test-deploy notes](docs/internal/test-deploy.md) — 🔒 maintainers only, removed before going public
+For a deeper reference on installation, parameters, data schemas, and troubleshooting, see the solution's own [README](<Solutions/TrendAI Vision One(CCF)/README.md>).
 
 ## 🤝 Support
 
@@ -365,6 +291,5 @@ Built following Microsoft's [Codeless Connector Platform (CCP)](https://learn.mi
 
 ---
 
-**Version**: 2.0.0  
-**Last Updated**: May 2026  
+**Version**: 3.0.2  
 **Maintained by**: Trend Micro
